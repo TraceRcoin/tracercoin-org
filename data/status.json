@@ -1,0 +1,50 @@
+{
+  "as_of": "2026-07-26",
+  "headline": "Tracercoin.org is live, secure, and taking signups.",
+  "summary": "The public site, waitlist, and miner portal are deployed on production infrastructure with HTTPS. The remaining work is content — rendering our own how-to videos to replace interim placeholders.",
+  "overall_state": "on-track",
+  "workstreams": [
+    {
+      "name": "Public website",
+      "detail": "Home, waitlist, pool, start guide, portal",
+      "percent": 100,
+      "state": "shipped"
+    },
+    {
+      "name": "Waitlist backend",
+      "detail": "Signup, phone verification, live position number",
+      "percent": 100,
+      "state": "shipped"
+    },
+    {
+      "name": "Login-aware pages",
+      "detail": "Signup-state badges, gated pool details",
+      "percent": 100,
+      "state": "shipped"
+    },
+    {
+      "name": "Miner portal",
+      "detail": "Portal login and connection details",
+      "percent": 90,
+      "state": "in-progress"
+    },
+    {
+      "name": "YouTube automation",
+      "detail": "@Tracercoin channel, API-managed uploads",
+      "percent": 100,
+      "state": "shipped"
+    },
+    {
+      "name": "How-to video content",
+      "detail": "Own videos to replace interim placeholders",
+      "percent": 20,
+      "state": "blocked"
+    }
+  ],
+  "next_milestones": [
+    "Render the core how-to videos (wallet, mining, node, plus guides)",
+    "Upload via the live @Tracercoin API pipeline and capture new video IDs",
+    "Swap the interim placeholder embeds on the start guide",
+    "Finish miner-portal polish to 100%"
+  ]
+}

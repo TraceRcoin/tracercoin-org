@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Status &amp; Release Notes — Tracercoin (TFX)</title>
+  <meta name="description" content="Live project status and release notes for Tracercoin (TFX). Available to waitlist members — see what's shipped, what's in progress, and what's next." />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Project Status &amp; Release Notes — Tracercoin (TFX)" />
+  <meta property="og:description" content="Live project status and release notes for Tracercoin (TFX), for waitlist members." />
+  <meta property="og:url" content="https://tracercoin.org/status/" />
+  <meta property="og:image" content="/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0a0e14" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint (see /js/auth-state.js) -->
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    /* ---- Reports page (uses the site's own tokens) ---- */
+    .status-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; }
+    .status-stamp {
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--accent-2);
+      border: 1px solid var(--border-2); padding: 4px 10px; border-radius: 20px;
+    }
+    .status-headline { font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.02em; margin: 6px 0 10px; }
+
+    /* member gate prompt */
+    .gate-card {
+      max-width: 640px; margin: 40px auto; text-align: center;
+      background: linear-gradient(180deg, var(--surface), var(--bg-alt));
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 34px;
+    }
+    .gate-card .lock { width: 56px; height: 56px; margin: 0 auto 18px; border-radius: 50%;
+      display: grid; place-items: center; color: var(--accent-2);
+      background: rgba(94,234,212,.10); border: 1px solid var(--border-2); }
+    .gate-card h2 { font-size: 1.5rem; margin-bottom: 12px; }
+    .gate-card p { color: var(--text-soft); margin-bottom: 24px; }
+
+    /* workstream progress rows */
+    .ws-rows { margin-top: 8px; }
+    .ws-row {
+      display: grid; grid-template-columns: minmax(200px, 1fr) 2fr 54px;
+      align-items: center; gap: 20px; padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .ws-name { font-size: 1.02rem; font-weight: 600; color: var(--text); }
+    .ws-name small { display: block; font-size: .82rem; font-weight: 400; color: var(--text-dim); margin-top: 3px; }
+    .ws-track { position: relative; height: 14px; background: var(--surface-2);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .ws-fill { position: absolute; inset: 0 auto 0 0; height: 100%; border-radius: 7px; }
+    .ws-shipped { background: linear-gradient(120deg, var(--accent-2), var(--accent)); }
+    .ws-in-progress { background: var(--accent); }
+    .ws-blocked { background: #fab219; }
+    .ws-pct { font-family: var(--mono); font-size: 1rem; font-weight: 700; text-align: right; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    .ws-legend { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 22px; font-size: .88rem; color: var(--text-soft); }
+    .ws-legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .sw { width: 13px; height: 13px; border-radius: 4px; flex: none; }
+    .sw-shipped { background: linear-gradient(120deg, var(--accent-2), var(--accent)); }
+    .sw-in-progress { background: var(--accent); }
+    .sw-blocked { background: #fab219; }
+
+    .next-block { margin-top: 34px; }
+    .next-block h3 { font-size: 1.1rem; margin-bottom: 14px; }
+    .next-list { list-style: none; padding: 0; margin: 0; }
+    .next-list li { position: relative; padding: 10px 0 10px 26px; color: var(--text-soft);
+      border-top: 1px solid var(--border); }
+    .next-list li:first-child { border-top: none; }
+    .next-list li::before { content: ""; position: absolute; left: 2px; top: 16px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent-2); }
+
+    /* release notes */
+    .rn-entry { display: grid; grid-template-columns: 190px 1fr; gap: 26px;
+      padding: 26px 0; border-top: 1px solid var(--border); }
+    .rn-entry:first-child { border-top: none; }
+    .rn-meta { display: flex; flex-direction: column; gap: 8px; }
+    .rn-date { font-family: var(--mono); font-size: .82rem; color: var(--text-dim); letter-spacing: .03em; }
+    .rn-ver { font-weight: 700; color: var(--accent-2); font-size: .95rem; }
+    .rn-title { font-size: 1.12rem; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .rn-tag { font-family: var(--mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .05em;
+      padding: 3px 8px; border-radius: 20px; border: 1px solid var(--border-2); color: var(--text-soft); }
+    .rn-launch { color: var(--accent-2); border-color: var(--accent-2); }
+    .rn-feature { color: var(--accent); border-color: var(--accent); }
+    .rn-items { list-style: none; padding: 0; margin: 0; }
+    .rn-items li { position: relative; padding: 6px 0 6px 22px; color: var(--text-soft); font-size: .97rem; }
+    .rn-items li::before { content: "›"; position: absolute; left: 4px; top: 5px; color: var(--accent-2); }
+    .muted { color: var(--text-dim); }
+
+    @media (max-width: 640px) {
+      .rn-entry { grid-template-columns: 1fr; gap: 10px; }
+      .ws-row { grid-template-columns: 1fr 44px; }
+      .ws-track { grid-column: 1 / -1; order: 3; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5eead4" />
+                <stop offset="1" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#what">What it is</a></li>
+        <li><a href="/#specs">Specs</a></li>
+        <li><a href="/pool/">Mining</a></li>
+        <li><a href="/status/" aria-current="page">Status</a></li>
+        <li><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="eyebrow">Members · Project reports</p>
+        <h1 id="hero-title">Status &amp; <span class="grad-text">release notes.</span></h1>
+        <p class="hero-sub">
+          A live look at where Tracercoin stands — what's shipped, what's in progress, and what's
+          coming next — plus a running log of what changed. Available to everyone on the waitlist.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ MEMBER GATE (anonymous visitors) ============ -->
+    <section class="section" data-tfx="anon-only" aria-labelledby="gate-title">
+      <div class="container">
+        <div class="gate-card">
+          <div class="lock" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26"><path d="M6 10V8a6 6 0 0 1 12 0v2M5 10h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </div>
+          <h2 id="gate-title">Status reports are for waitlist members</h2>
+          <p>Join the Tracercoin waitlist to unlock the live project status board and the full release
+            notes — then check back here any time to see how the build is progressing.</p>
+          <a class="btn btn-primary" href="/#waitlist">Join the waitlist</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATUS BOARD (members only) ============ -->
+    <section class="section" data-tfx="reg-only" aria-labelledby="status-title">
+      <div class="container">
+        <p class="section-eyebrow">Project status</p>
+        <div class="status-head">
+          <h2 id="status-title" class="section-title" style="margin:0;">Where things stand</h2>
+          <span class="status-stamp" id="status-asof">Updated —</span>
+        </div>
+        <p class="status-headline grad-text" id="status-headline">Loading status…</p>
+        <p class="section-lead" id="status-summary" style="margin-bottom:24px;"></p>
+
+        <div id="status-body">
+          <p class="muted">Loading project status…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELEASE NOTES (members only) ============ -->
+    <section class="section section-alt" data-tfx="reg-only" aria-labelledby="notes-title">
+      <div class="container">
+        <p class="section-eyebrow">Changelog</p>
+        <h2 id="notes-title" class="section-title">Release notes</h2>
+        <p class="section-lead">Everything we've shipped, most recent first.</p>
+
+        <div id="notes-body">
+          <p class="muted">Loading release notes…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+          <p class="footer-tag">A proof-of-work memory chain.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/#what">What it is</a>
+          <a href="/pool/">Mining</a>
+          <a href="/status/">Status</a>
+          <a href="/portal/">Miner portal</a>
+          <a href="/#waitlist" data-tfx="anon-only">Waitlist</a>
+        </nav>
+      </div>
+
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Nothing on this site is financial, legal, or tax advice.
+          Mining rewards are not fixed or guaranteed and depend on hardware, network difficulty, and
+          energy costs. No tokens are for sale, and this site does not solicit money.
+          Cryptocurrency and mining involve risk and may be subject to regulation in your jurisdiction.
+          Do your own research.
+        </p>
+      </div>
+
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+  <script src="/js/status.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "notes": [
+    {
+      "version": "Waitlist positions",
+      "date": "2026-07-26",
+      "title": "See your place in line",
+      "tags": ["improvement", "waitlist"],
+      "items": [
+        "The waitlist now returns your live position number when you join or verify.",
+        "Pages show a \"You're on the list #N\" badge once you've signed up.",
+        "Your position is cached locally so it reappears on every visit."
+      ]
+    },
+    {
+      "version": "Account-aware site",
+      "date": "2026-07-24",
+      "title": "The site knows you're in",
+      "tags": ["feature"],
+      "items": [
+        "Join-waitlist calls to action now hide automatically once you're registered.",
+        "Live pool connection details are gated behind miner-portal login.",
+        "No flash of the wrong UI — your state is applied before the page paints."
+      ]
+    },
+    {
+      "version": "Miner portal",
+      "date": "2026-07-20",
+      "title": "Miner portal login is live",
+      "tags": ["feature", "portal"],
+      "items": [
+        "Create a miner account and sign in to the portal.",
+        "Signed-in miners can view the live stratum URL, port, and worker settings."
+      ]
+    },
+    {
+      "version": "Launch",
+      "date": "2026-07-16",
+      "title": "Tracercoin.org goes live over HTTPS",
+      "tags": ["launch"],
+      "items": [
+        "Public site deployed to production with a valid HTTPS certificate.",
+        "Home and waitlist, mining start guide, and pool pages published.",
+        "Phone-verified waitlist signup open to the public."
+      ]
+    }
+  ]
+}
