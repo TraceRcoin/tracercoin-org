@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started with Tracercoin (TFX) — Setup &amp; Help</title>
+  <meta name="description" content="Set up Tracercoin (TFX) step by step: install the desktop wallet, start mining on the community pool, or run your own full node. Written guides plus video walkthroughs on YouTube." />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Get Started with Tracercoin (TFX) — Setup &amp; Help" />
+  <meta property="og:description" content="Install the wallet, start mining, or run a node. Step-by-step guides plus video walkthroughs." />
+  <meta property="og:url" content="https://tracercoin.org/start/" />
+  <meta property="og:image" content="/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0a0e14" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint (see /js/auth-state.js) -->
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    /* Page-local styles — reuse the site's own design tokens */
+    .status-banner {
+      display: flex; gap: 12px; align-items: flex-start;
+      max-width: var(--maxw); margin: 0 auto; padding: 14px 18px;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-left: 3px solid var(--accent-2); border-radius: var(--radius-sm);
+      color: var(--text-soft); font-size: .95rem;
+    }
+    .status-banner strong { color: var(--text); }
+
+    /* Video-channel feature card */
+    .video-feature {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: center;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-radius: var(--radius); padding: 30px; margin-top: 26px;
+    }
+    .video-feature h2 { margin: 0 0 10px; }
+    .video-feature p { color: var(--text-soft); margin: 0 0 18px; }
+    .video-thumb {
+      position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-sm);
+      overflow: hidden; border: 1px solid var(--border);
+      background:
+        radial-gradient(120% 120% at 20% 10%, rgba(56,189,248,.18), transparent 55%),
+        radial-gradient(120% 120% at 90% 90%, rgba(94,234,212,.16), transparent 55%),
+        #060a10;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-thumb .play {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(10,14,20,.65); border: 1px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-2);
+    }
+    .video-thumb .play svg { margin-left: 3px; }
+
+    /* Responsive embedded video players */
+    .video-embed {
+      position: relative; aspect-ratio: 16 / 9; width: 100%;
+      border-radius: var(--radius-sm); overflow: hidden;
+      border: 1px solid var(--border); background: #060a10;
+    }
+    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-note {
+      font-size: .82rem; color: var(--text-dim); margin: 10px 0 0;
+      display: flex; gap: 7px; align-items: flex-start;
+    }
+    .video-note strong { color: var(--text-soft); }
+    .path-video { margin: 22px 0 4px; }
+
+    /* Setup-path cards with numbered steps */
+    .path { margin-top: 30px; }
+    .path-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .path-tag {
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--accent-2);
+      border: 1px solid var(--border-2); border-radius: 999px; padding: 3px 10px;
+    }
+    .path-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 26px 28px; margin-top: 14px;
+    }
+    .path-card p.lead { color: var(--text-soft); margin: 0 0 18px; }
+    .path-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .watch-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 600; color: var(--accent-2); text-decoration: none;
+    }
+    .watch-link svg { flex: none; }
+    .watch-link:hover { text-decoration: underline; }
+    .inline-code { font-family: var(--mono); font-size: .9em; color: var(--accent-2); background: var(--surface); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+    .soon {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--text-dim);
+      border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px;
+    }
+    @media (max-width: 720px) {
+      .video-feature { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5eead4" />
+                <stop offset="1" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#what">What it is</a></li>
+        <li><a href="/#fingerprints">Fingerprints</a></li>
+        <li><a href="/start/" aria-current="page">Get started</a></li>
+        <li><a href="/pool/">Mining</a></li>
+        <li><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="eyebrow">Setup &amp; help</p>
+        <h1 id="hero-title">Get started with<br /><span class="grad-text">Tracercoin.</span></h1>
+        <p class="hero-sub">
+          Three ways to join the network: install the desktop <strong>wallet</strong>, point your
+          hardware at the mining <strong>pool</strong>, or run your own <strong>full node</strong>.
+          Follow the written steps below — and watch the video walkthroughs on our YouTube channel.
+        </p>
+        <div class="hero-cta">
+          <!-- YOUTUBE_CHANNEL_URL — replace with the real channel link -->
+          <a class="btn btn-primary" href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">Watch the video guides</a>
+          <a class="btn btn-ghost" href="#paths">Browse the steps</a>
+        </div>
+        <p class="hero-note">Free to join. No purchase, no token sale — TFX is earned by mining.</p>
+      </div>
+    </section>
+
+    <div class="container" style="margin-top:-14px;margin-bottom:8px;">
+      <div class="status-banner" role="note">
+        <span aria-hidden="true">&#9201;</span>
+        <span><strong>Network status: launch phase.</strong> The Tracercoin mainnet is live and the
+        wallet, pool, and node tools are coming online. Set up now using the guides below, and
+        <a href="/#waitlist">join the waitlist</a> to be notified the moment each piece opens.</span>
+      </div>
+    </div>
+
+    <!-- ============ VIDEO CHANNEL FEATURE ============ -->
+    <section class="section" aria-labelledby="video-title">
+      <div class="container">
+        <p class="section-eyebrow">Watch &amp; follow along</p>
+        <div class="video-feature">
+          <div>
+            <h2 id="video-title" class="section-title" style="margin-top:0;">Video walkthroughs on YouTube</h2>
+            <p>
+              Prefer to watch? Our YouTube channel has step-by-step videos for every part of the
+              setup — installing the wallet, configuring a miner, and standing up a node in your own
+              environment. New videos are added as each feature ships. Subscribe to be notified.
+            </p>
+            <!-- YOUTUBE_CHANNEL_URL — replace with the real channel link -->
+            <a class="btn btn-primary" href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">
+              Visit the Tracercoin channel
+            </a>
+          </div>
+          <!-- Featured walkthrough — Litecoin Core wallet setup (Tracercoin follows the Litecoin model).
+               Swap the video ID for the official Tracercoin video once it's published. -->
+          <div class="video-embed">
+            <iframe src="https://www.youtube-nocookie.com/embed/M3cNMiJ730c" title="Wallet setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SETUP PATHS ============ -->
+    <section id="paths" class="section section-alt" aria-labelledby="paths-title">
+      <div class="container">
+        <p class="section-eyebrow">Choose your path</p>
+        <h2 id="paths-title" class="section-title">Set it up, step by step</h2>
+        <p class="section-lead">
+          Pick what you want to do. Each guide has the written steps here and a matching video on the
+          channel. New to Tracercoin? Start with the wallet.
+        </p>
+
+        <!-- PATH 1: WALLET -->
+        <div class="path">
+          <div class="path-head">
+            <span class="path-tag">Path 1</span>
+            <h3 style="margin:0;">Install the desktop wallet</h3>
+            <span class="soon">Download coming at launch</span>
+          </div>
+          <div class="path-card">
+            <p class="lead">
+              The Tracercoin wallet is a standalone desktop app you run on your own computer. It holds
+              your keys, syncs the chain, and lets you send and receive TFX.
+            </p>
+            <ol class="steps">
+              <li class="step">
+                <div class="step-num" aria-hidden="true">1</div>
+                <h3>Download</h3>
+                <p>Grab the <strong>Tracercoin Core</strong> wallet for your operating system from the downloads page. Verify the checksum shown next to the file before you run it.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">2</div>
+                <h3>Install &amp; sync</h3>
+                <p>Open the app and let it connect to the network. The first launch downloads and verifies the blockchain — this can take a while. You'll see progress at the bottom of the window.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">3</div>
+                <h3>Encrypt &amp; back up</h3>
+                <p>Set a strong wallet passphrase, then back up your wallet file. Write down your recovery details and keep them offline — whoever holds the keys holds the coins.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">4</div>
+                <h3>Send &amp; receive</h3>
+                <p>Use the <strong>Receive</strong> tab to generate a <span class="inline-code">tfx…</span> address, and the <strong>Send</strong> tab to pay one. That's it — you're on the network.</p>
+              </li>
+            </ol>
+            <div class="path-video">
+              <div class="video-embed">
+                <iframe src="https://www.youtube-nocookie.com/embed/M3cNMiJ730c" title="Desktop wallet setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin Core is built on the Litecoin Core wallet, so this Litecoin setup guide maps almost step-for-step. We'll replace it with the official Tracercoin video at launch.</span></p>
+            </div>
+            <div class="path-actions">
+              <a class="btn btn-ghost btn-sm" href="/#waitlist">Get notified when the download is live</a>
+              <a class="watch-link" href="https://www.youtube.com/watch?v=M3cNMiJ730c" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                Watch the wallet setup video
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATH 2: MINING -->
+        <div class="path">
+          <div class="path-head">
+            <span class="path-tag">Path 2</span>
+            <h3 style="margin:0;">Start mining on the pool</h3>
+          </div>
+          <div class="path-card">
+            <p class="lead">
+              Have Scrypt hardware — an Antminer L7 / L3+ or a GPU rig? Point it at the community pool,
+              contribute hash power, and earn newly minted TFX for the blocks your hardware helps find.
+            </p>
+            <ol class="steps">
+              <li class="step">
+                <div class="step-num" aria-hidden="true">1</div>
+                <h3>Create a worker</h3>
+                <p>Sign in to the <strong>miner portal</strong> and add a worker. You'll get a <span class="inline-code">worker.name</span> and password your rig will log in with.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">2</div>
+                <h3>Point your rig</h3>
+                <p>In your miner's settings, set the Scrypt stratum URL to <span class="inline-code">pool.tracercoin.org:3333</span> and enter your worker credentials.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">3</div>
+                <h3>Watch it work</h3>
+                <p>The portal dashboard shows your live hashrate, shares, blocks found, and payout history — round by round.</p>
+              </li>
+            </ol>
+            <div class="path-video">
+              <div class="video-embed">
+                <iframe src="https://www.youtube-nocookie.com/embed/JoM5r5J8pOk" title="Scrypt Antminer pool mining setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin is Scrypt proof-of-work, so this Antminer L3+ pool-setup guide covers the same worker, stratum, and pool steps — just point your rig at <span class="inline-code">pool.tracercoin.org:3333</span> instead. Official Tracercoin video coming at launch.</span></p>
+            </div>
+            <div class="path-actions">
+              <a class="btn btn-primary btn-sm" href="/pool/">Full mining guide</a>
+              <a class="btn btn-ghost btn-sm" href="/portal/">Open the miner portal</a>
+              <a class="watch-link" href="https://www.youtube.com/watch?v=JoM5r5J8pOk" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                Watch the mining setup video
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATH 3: NODE -->
+        <div class="path">
+          <div class="path-head">
+            <span class="path-tag">Path 3</span>
+            <h3 style="margin:0;">Run your own full node</h3>
+            <span class="soon">For advanced users</span>
+          </div>
+          <div class="path-card">
+            <p class="lead">
+              Want to help decentralize the network? Run a full node on your own server. It keeps a
+              complete copy of the chain, relays transactions, and strengthens the network for everyone.
+            </p>
+            <ol class="steps">
+              <li class="step">
+                <div class="step-num" aria-hidden="true">1</div>
+                <h3>Provision a server</h3>
+                <p>Any small Linux server works. Install the build tools, then build or install the <span class="inline-code">tracercoind</span> daemon.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">2</div>
+                <h3>Configure &amp; connect</h3>
+                <p>Create a <span class="inline-code">tracercoin.conf</span>, add the seed node, and open the P2P port so peers can reach you.</p>
+              </li>
+              <li class="step">
+                <div class="step-num" aria-hidden="true">3</div>
+                <h3>Sync &amp; verify</h3>
+                <p>Start the daemon and let it sync from genesis. Once your block height matches the network, your node is live and helping secure the chain.</p>
+              </li>
+            </ol>
+            <div class="callout" role="note" style="margin-top:20px;">
+              <strong>Step-by-step README:</strong> the full node &amp; replication guide — provisioning,
+              building the daemon, config, and verifying consensus — is published with the source. Ask
+              in the community if you'd like a hand.
+            </div>
+            <div class="path-video">
+              <div class="video-embed">
+                <iframe src="https://www.youtube-nocookie.com/embed/H9VMgP-yEjc" title="Full node setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin runs the Litecoin Core node software, so this Litecoin node setup guide covers the same daemon, config, and sync steps — use <span class="inline-code">tracercoind</span> and <span class="inline-code">tracercoin.conf</span> in place of the Litecoin names. Official Tracercoin video coming at launch.</span></p>
+            </div>
+            <div class="path-actions">
+              <a class="watch-link" href="https://www.youtube.com/watch?v=H9VMgP-yEjc" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                Watch the node setup video
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HELP / SUPPORT ============ -->
+    <section id="help" class="section" aria-labelledby="help-title">
+      <div class="container narrow">
+        <p class="section-eyebrow">Need a hand?</p>
+        <h2 id="help-title" class="section-title">Help &amp; support</h2>
+        <p class="section-lead">
+          Stuck on a step? Start with the video for that path, then check the answers below.
+        </p>
+
+        <div class="faq">
+          <details class="faq-item">
+            <summary>Where do I download the wallet?</summary>
+            <div class="faq-body">
+              <p>The desktop wallet is in final testing. The download will be posted on this site the moment it's ready — <a href="/#waitlist">join the waitlist</a> and we'll notify you. Every release will list a checksum so you can verify the file before running it.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Do I need special hardware to mine?</summary>
+            <div class="faq-body">
+              <p>Tracercoin uses Scrypt proof-of-work, so you can mine with standard Scrypt ASICs like the Antminer L7 or L3+, or with a GPU. See the <a href="/pool/">full mining guide</a> for setup details.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Is my wallet backup important?</summary>
+            <div class="faq-body">
+              <p>Yes — critically. Your wallet holds your keys. If you lose your wallet file and passphrase, no one can recover your coins for you. Back up your wallet and store the recovery details offline.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Where are the video guides?</summary>
+            <div class="faq-body">
+              <!-- YOUTUBE_CHANNEL_URL — replace with the real channel link -->
+              <p>All setup walkthroughs live on our <a href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">YouTube channel</a>. Subscribe to get notified when new guides are posted for each feature as it launches.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="callout" role="note" style="margin-top:26px;">
+          <strong>Still stuck?</strong> Watch the matching video on the
+          <!-- YOUTUBE_CHANNEL_URL — replace with the real channel link -->
+          <a href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">YouTube channel</a>,
+          then <a href="/#waitlist">join the waitlist</a> to reach the community as it comes online.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+          <p class="footer-tag">A proof-of-work memory chain.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/#what">What it is</a>
+          <a href="/#fingerprints">Fingerprints</a>
+          <a href="/start/">Get started</a>
+          <a href="/pool/">Mining</a>
+          <a href="/portal/">Miner portal</a>
+          <a href="/#waitlist">Waitlist</a>
+        </nav>
+      </div>
+
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Nothing on this site is financial, legal, or tax advice.
+          No tokens are for sale, and this site does not solicit money; it is an information waitlist only.
+          Cryptocurrency and mining involve risk and may be subject to regulation in your jurisdiction.
+          Do your own research.
+        </p>
+      </div>
+
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Mining Tracercoin (TFX) — Pool Get-Started Guide</title>
+  <meta name="description" content="Get started mining Tracercoin (TFX) on the community Scrypt pool. Point your Scrypt hardware at pool.tracercoin.org, configure a worker, and help secure the memory chain. Step-by-step setup guide." />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Start Mining Tracercoin (TFX) — Pool Get-Started Guide" />
+  <meta property="og:description" content="Point your Scrypt hardware at the Tracercoin community pool and help secure the proof-of-work memory chain. Step-by-step setup." />
+  <meta property="og:url" content="https://tracercoin.org/pool/" />
+  <meta property="og:image" content="/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0a0e14" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint (see /js/auth-state.js) -->
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    /* Page-local styles for mining config blocks — uses the site's own tokens */
+    .status-banner {
+      display: flex; gap: 12px; align-items: flex-start;
+      max-width: var(--maxw); margin: 0 auto; padding: 14px 18px;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-left: 3px solid var(--accent-2); border-radius: var(--radius-sm);
+      color: var(--text-soft); font-size: .95rem;
+    }
+    .status-banner strong { color: var(--text); }
+    .codeblock {
+      position: relative; margin: 14px 0 4px;
+      background: #060a10; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+    }
+    .codeblock-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 14px; border-bottom: 1px solid var(--border);
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+    .codeblock pre {
+      margin: 0; padding: 14px 16px; overflow-x: auto;
+      font-family: var(--mono); font-size: .86rem; line-height: 1.6;
+      color: var(--text); tab-size: 2;
+    }
+    .codeblock pre .tok { color: var(--accent-2); }
+    .codeblock pre .cmt { color: var(--text-dim); }
+    .req-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px; margin-top: 26px;
+    }
+    .pool-params {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; margin-top: 24px;
+    }
+    .pool-param { background: var(--surface); padding: 18px 20px; }
+    .pool-param dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin: 0 0 6px; }
+    .pool-param dd { margin: 0; font-family: var(--mono); font-size: 1.02rem; color: var(--accent-2); word-break: break-all; }
+    .inline-code { font-family: var(--mono); font-size: .9em; color: var(--accent-2); background: var(--surface); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5eead4" />
+                <stop offset="1" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#what">What it is</a></li>
+        <li><a href="/#fingerprints">Fingerprints</a></li>
+        <li><a href="/#specs">Specs</a></li>
+        <li><a href="/pool/" aria-current="page">Mining</a></li>
+        <li><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="eyebrow">Mining &middot; Scrypt proof-of-work</p>
+        <h1 id="hero-title">Start mining<br /><span class="grad-text">Tracercoin.</span></h1>
+        <p class="hero-sub">
+          Point your Scrypt hardware at the community pool, contribute hash power, and help secure the
+          <strong>memory chain</strong>. Miners process blocks and receive newly minted TFX for the
+          work their hardware contributes.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#quickstart">Quick start</a>
+          <a class="btn btn-ghost" href="#requirements">What you need</a>
+        </div>
+        <p class="hero-note">Community mining. No purchase, no token sale — blocks are earned by proof-of-work.</p>
+      </div>
+    </section>
+
+    <div class="container" style="margin-top:-14px;margin-bottom:8px;">
+      <div class="status-banner" role="note">
+        <span aria-hidden="true">&#9201;</span>
+        <span><strong>Network status: launch phase.</strong> The Tracercoin mainnet is live and the
+        community pool is coming online. Set up your rig now using the guide below — and
+        <a href="/#waitlist">join the waitlist</a> to be notified the moment the pool opens for
+        connections.</span>
+      </div>
+    </div>
+
+    <!-- ============ WHAT YOU NEED ============ -->
+    <section id="requirements" class="section" aria-labelledby="req-title">
+      <div class="container">
+        <p class="section-eyebrow">Before you start</p>
+        <h2 id="req-title" class="section-title">What you need to mine</h2>
+        <p class="section-lead">
+          Tracercoin uses the Scrypt proof-of-work algorithm — the same as Litecoin — so it mines on
+          standard, widely available Scrypt hardware. Three things get you going.
+        </p>
+
+        <div class="req-grid">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="6" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 10h0M7 14h0M11 10h6M11 14h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Scrypt hardware</h3>
+            <p>A Scrypt ASIC such as the Antminer L7 or L3+, or a GPU rig. Any miner that speaks the
+              Scrypt Stratum protocol will work.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z M16 12h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>A TFX wallet address</h3>
+            <p>Your payout destination — a Tracercoin address beginning <span class="inline-code">tfx1&hellip;</span>
+              generated by the Tracercoin wallet. Rewards for your shares are paid here.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Mining software</h3>
+            <p>A Scrypt miner such as <span class="inline-code">cgminer</span>,
+              <span class="inline-code">bfgminer</span>, or your ASIC's built-in dashboard —
+              anything that connects to a Stratum pool.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ POOL DETAILS ============ -->
+    <section id="pool" class="section section-alt" aria-labelledby="pool-title">
+      <div class="container">
+        <p class="section-eyebrow">The pool</p>
+        <h2 id="pool-title" class="section-title">Community pool connection details</h2>
+        <p class="section-lead">
+          These are the settings you'll enter into your miner. The pool combines everyone's hash
+          power so blocks are found steadily, then distributes rewards by the shares each worker
+          contributed.
+        </p>
+
+        <!-- Not signed in yet: prompt to sign in before revealing live pool details -->
+        <div class="gate-note" data-tfx="noauth-only" role="note">
+          <span aria-hidden="true">&#128274;</span>
+          <span><strong>Sign in to view the pool connection details.</strong>
+          Log in to your <a href="/portal/">miner portal</a> account — the live stratum URL, port,
+          and worker settings appear here once you're signed in. New here?
+          <a href="/portal/">Create a miner account</a>.</span>
+        </div>
+
+        <dl class="pool-params" data-tfx="auth-only" aria-label="Tracercoin pool connection parameters">
+          <div class="pool-param">
+            <dt>Stratum URL</dt>
+            <dd>stratum+tcp://pool.tracercoin.org</dd>
+          </div>
+          <div class="pool-param">
+            <dt>Port</dt>
+            <dd>3333</dd>
+          </div>
+          <div class="pool-param">
+            <dt>Algorithm</dt>
+            <dd>Scrypt</dd>
+          </div>
+          <div class="pool-param">
+            <dt>Username</dt>
+            <dd>your-tfx1-address.worker</dd>
+          </div>
+          <div class="pool-param">
+            <dt>Password</dt>
+            <dd>x</dd>
+          </div>
+          <div class="pool-param">
+            <dt>Pool fee</dt>
+            <dd>2%</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ QUICK START ============ -->
+    <section id="quickstart" class="section" aria-labelledby="qs-title">
+      <div class="container">
+        <p class="section-eyebrow">Get started</p>
+        <h2 id="qs-title" class="section-title">Four steps to your first shares</h2>
+        <p class="section-lead">
+          From a fresh machine to submitting work in a few minutes.
+        </p>
+
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3>Get a wallet address</h3>
+            <p>Install the Tracercoin wallet and create a receiving address (it starts with
+              <span class="inline-code">tfx1</span>). This is where your mining rewards are sent, so
+              keep your wallet backed up and your keys private.</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3>Install your mining software</h3>
+            <p>Set up a Scrypt miner such as <span class="inline-code">cgminer</span> or
+              <span class="inline-code">bfgminer</span>, or open your ASIC's built-in miner
+              configuration page. You'll enter the pool details from above.</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">3</div>
+            <h3>Point it at the pool</h3>
+            <p>Use your <span class="inline-code">tfx1&hellip;</span> address as the worker username
+              (optionally add a <span class="inline-code">.name</span> suffix per rig). The password
+              can be anything — <span class="inline-code">x</span> is fine.</p>
+
+            <div class="codeblock" role="group" aria-label="cgminer example command">
+              <div class="codeblock-head"><span>cgminer &middot; command line</span></div>
+              <pre><span class="cmt"># replace the address with your own tfx1 wallet address</span>
+cgminer <span class="tok">--scrypt</span> \
+  <span class="tok">-o</span> stratum+tcp://pool.tracercoin.org:3333 \
+  <span class="tok">-u</span> tfx1youraddresshere.rig1 \
+  <span class="tok">-p</span> x</pre>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">4</div>
+            <h3>Start hashing &amp; monitor</h3>
+            <p>Start your miner. It will connect, request work, and begin submitting shares. Watch
+              your accepted-share count climb — that's your hardware contributing to the network and
+              earning rewards proportional to the work it does.</p>
+
+            <div class="codeblock" role="group" aria-label="Generic Stratum config example">
+              <div class="codeblock-head"><span>generic stratum config</span></div>
+              <pre>{
+  <span class="tok">"algo"</span>: <span class="tok">"scrypt"</span>,
+  <span class="tok">"url"</span>:  <span class="tok">"stratum+tcp://pool.tracercoin.org:3333"</span>,
+  <span class="tok">"user"</span>: <span class="tok">"tfx1youraddresshere.rig1"</span>,
+  <span class="tok">"pass"</span>: <span class="tok">"x"</span>
+}</pre>
+            </div>
+          </li>
+        </ol>
+
+        <div class="callout" role="note">
+          <strong>A note on rewards.</strong> Mining rewards are newly minted TFX paid for the
+          proof-of-work your hardware contributes. Actual output depends on your hash rate, total
+          network difficulty, and electricity cost — it is not fixed or guaranteed. This guide
+          describes how to participate in mining; it is not financial advice.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq" class="section section-alt" aria-labelledby="faq-title">
+      <div class="container narrow">
+        <p class="section-eyebrow">Mining questions</p>
+        <h2 id="faq-title" class="section-title">Frequently asked</h2>
+
+        <div class="faq">
+          <details class="faq-item">
+            <summary>What hardware can mine TFX?</summary>
+            <div class="faq-body">
+              <p>Any Scrypt-capable miner. Scrypt ASICs such as the Antminer L7 and L3+ are the most
+                efficient, but GPUs running a Scrypt miner work too. Because Tracercoin uses the same
+                algorithm as Litecoin, hardware built for Scrypt mining is directly compatible.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How are rewards calculated?</summary>
+            <div class="faq-body">
+              <p>The pool finds blocks with everyone's combined hash power and distributes the reward
+                by the share of work each miner contributed. The block reward is 400 TFX at launch,
+                halving every 840,000 blocks, with a 2.5-minute target block time. A 2% pool fee
+                covers operation.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where do my rewards go?</summary>
+            <div class="faq-body">
+              <p>To the <span class="inline-code">tfx1&hellip;</span> wallet address you set as your
+                worker username. Keep that wallet backed up — whoever holds the keys holds the coins.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is the pool live yet?</summary>
+            <div class="faq-body">
+              <p>The mainnet chain is live and the community pool is coming online during the launch
+                phase. You can prepare your rig now using this guide. Join the
+                <a href="/#waitlist">waitlist</a> to be notified the moment the pool opens for
+                connections.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I solo mine instead?</summary>
+            <div class="faq-body">
+              <p>Yes — you can run a full Tracercoin node and mine directly against it. Pool mining is
+                recommended for most people because it smooths out rewards into steady, frequent
+                payouts rather than waiting to find a whole block on your own.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do I need to buy anything to start?</summary>
+            <div class="faq-body">
+              <p>No. There is no token sale or purchase. TFX is earned by mining once the network is
+                live — you only need Scrypt hardware, electricity, and a wallet address.</p>
+            </div>
+          </details>
+        </div>
+
+        <div style="text-align:center;margin-top:36px;" data-tfx="anon-only">
+          <a class="btn btn-primary" href="/#waitlist">Get notified when the pool opens</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+          <p class="footer-tag">A proof-of-work memory chain.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/#what">What it is</a>
+          <a href="/#fingerprints">Fingerprints</a>
+          <a href="/#specs">Specs</a>
+          <a href="/pool/">Mining</a>
+          <a href="/#waitlist" data-tfx="anon-only">Waitlist</a>
+        </nav>
+      </div>
+
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Nothing on this site is financial, legal, or tax advice.
+          Mining rewards are not fixed or guaranteed and depend on hardware, network difficulty, and
+          energy costs. No tokens are for sale, and this site does not solicit money.
+          Cryptocurrency and mining involve risk and may be subject to regulation in your jurisdiction.
+          Do your own research.
+        </p>
+      </div>
+
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>

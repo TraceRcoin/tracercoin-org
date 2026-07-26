@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miner Portal — Tracercoin (TFX)</title>
+  <meta name="description" content="Tracercoin miner portal — manage your worker credentials, watch block progress, and review your reward and payout history on the community Scrypt pool." />
+  <meta name="robots" content="noindex" />
+
+  <meta name="theme-color" content="#0a0e14" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint (see /js/auth-state.js) -->
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    /* ---- Portal-local styles: built on the site's own design tokens ---- */
+    .portal-wrap { max-width: 960px; margin: 0 auto; padding: 40px 22px 80px; }
+
+    /* Auth card */
+    .auth-card {
+      max-width: 460px; margin: 24px auto 0; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 30px 28px; box-shadow: var(--shadow);
+    }
+    .auth-tabs { display: flex; gap: 6px; margin-bottom: 22px; background: var(--bg-alt);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px; }
+    .auth-tab { flex: 1; padding: 9px 12px; border: 0; background: transparent; cursor: pointer;
+      color: var(--text-dim); font: inherit; font-weight: 600; border-radius: 7px; }
+    .auth-tab[aria-selected="true"] { background: var(--surface-2); color: var(--text); box-shadow: 0 1px 0 rgba(255,255,255,.03) inset; }
+
+    /* Generic inputs (site CSS only styles email/tel; extend to text/password) */
+    .field input[type="text"], .field input[type="password"] {
+      width: 100%; padding: 12px 14px; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border-2); border-radius: var(--radius-sm);
+      font: inherit; font-size: 1rem;
+    }
+    .field input[type="text"]:focus-visible, .field input[type="password"]:focus-visible {
+      outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent);
+    }
+    .field input[aria-invalid="true"] { border-color: var(--danger); }
+    .field { margin-bottom: 16px; }
+
+    .muted { color: var(--text-dim); font-size: .86rem; }
+    .linklike { background: none; border: 0; color: var(--accent-2); cursor: pointer; font: inherit; padding: 0; text-decoration: underline; }
+
+    /* Dashboard */
+    .dash-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 26px; }
+    .dash-head h1 { font-size: 1.5rem; margin: 0; }
+    .dash-head .who { color: var(--text-soft); }
+    .dash-head .who b { color: var(--accent-2); font-family: var(--mono); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .stat { background: var(--surface); padding: 18px 20px; }
+    .stat dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin: 0 0 6px; }
+    .stat dd { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--text); font-family: var(--mono); }
+    .stat dd.accent { color: var(--accent-2); }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px 22px; margin-top: 22px; }
+    .panel h2 { font-size: 1.12rem; margin: 0 0 4px; }
+    .panel .panel-lead { color: var(--text-soft); font-size: .92rem; margin: 0 0 16px; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+    table.grid { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    table.grid th, table.grid td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    table.grid th { color: var(--text-dim); font-weight: 600; font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; }
+    table.grid td { color: var(--text-soft); }
+    table.grid td.mono, table.grid td .mono { font-family: var(--mono); color: var(--text); }
+    .empty { color: var(--text-dim); padding: 16px 12px; font-size: .92rem; }
+
+    .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 600; border: 1px solid var(--border-2); }
+    .pill.on { color: var(--success); border-color: rgba(74,222,128,.35); }
+    .pill.off { color: var(--text-dim); }
+    .pill.paid { color: var(--success); border-color: rgba(74,222,128,.35); }
+    .pill.pending { color: var(--accent); border-color: rgba(56,189,248,.35); }
+    .pill.confirmed { color: var(--success); border-color: rgba(74,222,128,.35); }
+    .pill.orphan { color: var(--danger); border-color: rgba(248,113,113,.35); }
+
+    /* Round progress bar */
+    .progress { height: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width: 0; transition: width .4s ease; }
+
+    /* Reveal box for a freshly minted worker password */
+    .reveal { margin-top: 14px; background: #060a10; border: 1px solid var(--accent-2); border-radius: var(--radius-sm); padding: 14px 16px; }
+    .reveal code { font-family: var(--mono); color: var(--accent-2); font-size: 1rem; word-break: break-all; }
+    .reveal .muted { margin-top: 6px; }
+
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .switch { position: relative; width: 46px; height: 26px; flex: 0 0 auto; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .track { position: absolute; inset: 0; background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 999px; transition: .2s; }
+    .switch .track::before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px; background: var(--text-dim); border-radius: 50%; transition: .2s; }
+    .switch input:checked + .track { background: rgba(94,234,212,.18); border-color: var(--accent-2); }
+    .switch input:checked + .track::before { transform: translateX(20px); background: var(--accent-2); }
+
+    .row-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-danger { background: transparent; border: 1px solid rgba(248,113,113,.4); color: var(--danger); }
+    .btn-danger:hover { border-color: var(--danger); }
+    .hidden { display: none !important; }
+    .inline-code { font-family: var(--mono); font-size: .9em; color: var(--accent-2); background: var(--bg-alt); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+    .banner { max-width: 960px; margin: 0 auto 8px; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5eead4" /><stop offset="1" stop-color="#38bdf8" />
+            </linearGradient></defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/#what">What it is</a></li>
+        <li><a href="/pool/">Mining</a></li>
+        <li><a href="/portal/" aria-current="page">Miner portal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="portal-wrap">
+
+      <!-- ============ AUTH VIEW ============ -->
+      <section id="auth-view" aria-labelledby="auth-title">
+        <div style="text-align:center;max-width:520px;margin:0 auto;">
+          <p class="eyebrow">Miner portal</p>
+          <h1 id="auth-title" class="section-title" style="margin-bottom:10px;">Manage your mining</h1>
+          <p class="section-lead" style="margin:0 auto;">
+            Sign in to set up worker credentials, watch block progress in real time, and review
+            your reward and payout history.
+          </p>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-tabs" role="tablist" aria-label="Sign in or create an account">
+            <button class="auth-tab" id="tab-login" role="tab" aria-selected="true" aria-controls="login-form">Sign in</button>
+            <button class="auth-tab" id="tab-register" role="tab" aria-selected="false" aria-controls="register-form">Create account</button>
+          </div>
+
+          <!-- Sign in -->
+          <form id="login-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+            <div class="field">
+              <label for="login-username">Username</label>
+              <input type="text" id="login-username" autocomplete="username" autocapitalize="none" spellcheck="false" />
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="login-submit">Sign in</button>
+            <p class="form-status" id="login-status" role="status" aria-live="polite"></p>
+          </form>
+
+          <!-- Create account -->
+          <form id="register-form" class="hidden" role="tabpanel" aria-labelledby="tab-register" novalidate>
+            <div class="field">
+              <label for="reg-username">Username</label>
+              <input type="text" id="reg-username" autocomplete="username" autocapitalize="none" spellcheck="false" />
+              <p class="field-hint">3–32 characters: letters, numbers, hyphen or underscore.</p>
+            </div>
+            <div class="field">
+              <label for="reg-password">Password</label>
+              <input type="password" id="reg-password" autocomplete="new-password" />
+              <p class="field-hint">At least 8 characters.</p>
+            </div>
+            <div class="field">
+              <label for="reg-address">Payout TFX address <span class="muted">(optional — you can add it later)</span></label>
+              <input type="text" id="reg-address" placeholder="tfx1…" autocapitalize="none" spellcheck="false" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="reg-submit">Create account</button>
+            <p class="form-status" id="reg-status" role="status" aria-live="polite"></p>
+          </form>
+
+          <!-- 2FA code step (shown only when a login needs a texted code) -->
+          <form id="otp-form" class="hidden" novalidate>
+            <h3 style="margin:0 0 6px;">Check your phone</h3>
+            <p class="muted" style="margin:0 0 16px;">We texted a code to <strong id="otp-target"></strong>. Enter it to finish signing in.</p>
+            <div class="field">
+              <label for="otp-code">Verification code</label>
+              <input type="text" id="otp-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="otp-submit">Verify &amp; sign in</button>
+            <p class="form-status" id="otp-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <p class="muted" style="text-align:center;margin-top:20px;">
+          New to mining? See the <a class="linklike" href="/pool/">get-started guide</a> first.
+        </p>
+      </section>
+
+      <!-- ============ DASHBOARD VIEW ============ -->
+      <section id="dash-view" class="hidden" aria-labelledby="dash-title">
+        <div class="dash-head">
+          <div>
+            <h1 id="dash-title">Mining dashboard</h1>
+            <p class="who">Signed in as <b id="dash-username">—</b></p>
+          </div>
+          <div class="row-actions">
+            <button class="btn btn-ghost btn-sm" id="refresh-btn">Refresh</button>
+            <button class="btn btn-ghost btn-sm" id="logout-btn">Sign out</button>
+          </div>
+        </div>
+
+        <p class="form-status" id="dash-status" role="status" aria-live="polite"></p>
+
+        <!-- Activity -->
+        <dl class="stat-row" aria-label="Mining summary">
+          <div class="stat"><dt>Workers</dt><dd id="s-workers">0</dd></div>
+          <div class="stat"><dt>Online</dt><dd id="s-online" class="accent">0</dd></div>
+          <div class="stat"><dt>Hash rate</dt><dd id="s-hashrate">0</dd></div>
+          <div class="stat"><dt>Pending reward</dt><dd id="s-pending" class="accent">0 TFX</dd></div>
+        </dl>
+
+        <div class="panel">
+          <h2>Current round progress</h2>
+          <p class="panel-lead">How far the pool is into finding the next block.</p>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="round-bar-wrap">
+            <span id="round-bar"></span>
+          </div>
+          <p class="muted" id="round-text" style="margin-top:8px;">Waiting for the pool to come online.</p>
+        </div>
+
+        <!-- Workers -->
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Workers</h2>
+              <p class="panel-lead">Each worker is a login your mining rig connects with.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="add-worker-btn">+ Add worker</button>
+          </div>
+
+          <form id="add-worker-form" class="hidden" style="margin:6px 0 18px;">
+            <div class="field">
+              <label for="worker-name">Worker name</label>
+              <input type="text" id="worker-name" placeholder="rig01" autocapitalize="none" spellcheck="false" />
+              <p class="field-hint">Your rig will log in as <span class="inline-code" id="worker-login-preview">username.rig01</span></p>
+            </div>
+            <div class="field">
+              <label for="worker-label">Label <span class="muted">(optional)</span></label>
+              <input type="text" id="worker-label" placeholder="Garage L7" />
+            </div>
+            <div class="row-actions">
+              <button type="submit" class="btn btn-primary btn-sm" id="worker-create">Create worker</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="worker-cancel">Cancel</button>
+            </div>
+            <p class="form-status" id="worker-status" role="status" aria-live="polite" style="text-align:left;"></p>
+            <div class="reveal hidden" id="worker-reveal">
+              <div>Worker password (shown once — put it in your rig config): <code id="worker-pass"></code></div>
+              <p class="muted">Store it now. For your safety we only keep a hashed copy and can't show it again.</p>
+            </div>
+          </form>
+
+          <div id="workers-table"></div>
+
+          <!-- Manage a selected worker: change label / rotate pool password -->
+          <div id="worker-edit" class="hidden" style="margin-top:18px;border-top:1px solid var(--border);padding-top:18px;">
+            <h3 style="margin:0 0 12px;">Manage <span class="inline-code" id="edit-login">—</span></h3>
+            <form id="worker-edit-form" novalidate>
+              <div class="field">
+                <label for="edit-label">Label</label>
+                <input type="text" id="edit-label" placeholder="e.g. Garage L7" />
+              </div>
+              <div class="field">
+                <label for="edit-password">New pool password <span class="muted">(optional)</span></label>
+                <input type="password" id="edit-password" autocomplete="new-password" placeholder="Leave blank to keep the current one" />
+                <p class="field-hint">
+                  Setting this rotates the password your rig uses to connect to the pool — you'll
+                  need to update your mining software with it. Or
+                  <button type="button" class="linklike" id="edit-generate">generate a random one</button>.
+                </p>
+                <p class="field-hint hidden" id="edit-gen-note">A new random password will be generated and shown when you save.</p>
+              </div>
+              <div class="row-actions">
+                <button type="submit" class="btn btn-primary btn-sm" id="edit-save">Save settings</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="edit-cancel">Cancel</button>
+              </div>
+              <p class="form-status" id="edit-status" role="status" aria-live="polite" style="text-align:left;"></p>
+              <div class="reveal hidden" id="edit-reveal">
+                <div>New worker password (shown once): <code id="edit-pass-shown"></code></div>
+                <p class="muted">Put this in your rig config now. We only keep a hashed copy and can't show it again.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Payouts -->
+        <div class="panel">
+          <h2>Reward &amp; payout history</h2>
+          <p class="panel-lead">Block rewards credited to your account, and what's been paid out.</p>
+          <dl class="stat-row" style="margin-bottom:16px;">
+            <div class="stat"><dt>Paid</dt><dd id="p-paid" class="accent">0 TFX</dd></div>
+            <div class="stat"><dt>Pending</dt><dd id="p-pending">0 TFX</dd></div>
+            <div class="stat"><dt>Lifetime</dt><dd id="p-lifetime">0 TFX</dd></div>
+          </dl>
+          <div id="payouts-table"></div>
+        </div>
+
+        <!-- Recent blocks -->
+        <div class="panel">
+          <h2>Recent blocks found</h2>
+          <p class="panel-lead">Blocks the pool has completed, newest first.</p>
+          <div id="blocks-table"></div>
+        </div>
+
+        <!-- Security / 2FA -->
+        <div class="panel">
+          <h2>Security</h2>
+          <div class="toggle-row">
+            <div>
+              <strong>Two-factor at sign-in</strong>
+              <p class="panel-lead" style="margin:4px 0 0;">
+                Optional. When on, signing in also requires a code texted to your phone.
+                <span id="twofa-state" class="muted"></span>
+              </p>
+            </div>
+            <label class="switch" title="Toggle two-factor authentication">
+              <input type="checkbox" id="twofa-toggle" />
+              <span class="track" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <!-- 2FA enable flow -->
+          <form id="twofa-enable-form" class="hidden" style="margin-top:16px;">
+            <div class="field">
+              <label for="twofa-phone">Cell phone number</label>
+              <input type="tel" id="twofa-phone" placeholder="(555) 123-4567" autocomplete="tel" />
+              <p class="field-hint">We'll text a code to confirm it. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" id="twofa-send">Send code</button>
+            <div class="field hidden" id="twofa-code-field" style="margin-top:14px;">
+              <label for="twofa-code">Enter the code</label>
+              <input type="text" id="twofa-code" inputmode="numeric" maxlength="10" placeholder="123456" />
+            </div>
+            <div class="row-actions hidden" id="twofa-confirm-actions">
+              <button type="button" class="btn btn-primary btn-sm" id="twofa-confirm">Turn on two-factor</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="twofa-enable-cancel">Cancel</button>
+            </div>
+            <p class="form-status" id="twofa-status" role="status" aria-live="polite" style="text-align:left;"></p>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Mining rewards are not fixed or guaranteed and depend
+          on hardware, network difficulty, and energy costs. Nothing here is financial, legal, or tax advice.
+        </p>
+      </div>
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/portal.js" defer></script>
+</body>
+</html>
