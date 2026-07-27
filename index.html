@@ -62,7 +62,8 @@
       border-radius: var(--radius-sm); overflow: hidden;
       border: 1px solid var(--border); background: #060a10;
     }
-    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-embed iframe,
+    .video-embed video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #060a10; object-fit: cover; }
     .video-note {
       font-size: .82rem; color: var(--text-dim); margin: 10px 0 0;
       display: flex; gap: 7px; align-items: flex-start;
@@ -163,11 +164,11 @@
           Tracercoin (TFX) is a Scrypt proof-of-work memory chain. Three ways to join the network:
           install the desktop <strong>wallet</strong>, point your hardware at the mining
           <strong>pool</strong>, or run your own <strong>full node</strong>. Follow the written steps
-          below — and watch the video walkthroughs on our YouTube channel.
+          below — and watch the Winslow video walkthroughs, right here on the page.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#paths">Browse the steps</a>
-          <a class="btn btn-ghost" href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">Watch the video guides</a>
+          <a class="btn btn-ghost" href="#video-title">Watch the video guides</a>
         </div>
         <p class="hero-note">Free to join. No purchase, no token sale — TFX is earned by mining. New here? <a href="/about/#what">What Tracercoin is</a>.</p>
       </div>
@@ -189,20 +190,20 @@
         <p class="section-eyebrow">Watch &amp; follow along</p>
         <div class="video-feature">
           <div>
-            <h2 id="video-title" class="section-title" style="margin-top:0;">Video walkthroughs on YouTube</h2>
+            <h2 id="video-title" class="section-title" style="margin-top:0;">Winslow video walkthroughs</h2>
             <p>
-              Prefer to watch? Our YouTube channel has step-by-step videos for every part of the
-              setup — installing the wallet, configuring a miner, and standing up a node in your own
-              environment. New videos are added as each feature ships. Subscribe to be notified.
+              Prefer to watch? Every part of the setup has an original walkthrough narrated by
+              Winslow — this overview, plus the wallet, mining, and node guides below. They play
+              right here on the page. Start with the overview.
             </p>
-            <a class="btn btn-primary" href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">
-              Visit the Tracercoin channel
-            </a>
+            <a class="btn btn-primary" href="#paths">Browse the walkthroughs</a>
           </div>
-          <!-- Featured walkthrough — Litecoin Core wallet setup (Tracercoin follows the Litecoin model).
-               Swap the video ID for the official Tracercoin video once it's published. -->
+          <!-- Featured walkthrough — original Winslow-narrated overview, self-hosted MP4. -->
           <div class="video-embed">
-            <iframe src="https://www.youtube-nocookie.com/embed/M3cNMiJ730c" title="Wallet setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <video class="video-player" controls preload="none" playsinline poster="/videos/tfx-overview.jpg">
+              <source src="/videos/tfx-overview.mp4" type="video/mp4" />
+              <a href="/videos/tfx-overview.mp4">Download the overview walkthrough (MP4)</a>
+            </video>
           </div>
         </div>
       </div>
@@ -254,16 +255,15 @@
             </ol>
             <div class="path-video">
               <div class="video-embed">
-                <iframe src="https://www.youtube-nocookie.com/embed/M3cNMiJ730c" title="Desktop wallet setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <video class="video-player" controls preload="none" playsinline poster="/videos/tfx-wallet.jpg">
+                  <source src="/videos/tfx-wallet.mp4" type="video/mp4" />
+                  <a href="/videos/tfx-wallet.mp4">Download the wallet walkthrough (MP4)</a>
+                </video>
               </div>
-              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin Core is built on the Litecoin Core wallet, so this Litecoin setup guide maps almost step-for-step. We'll replace it with the official Tracercoin video at launch.</span></p>
+              <p class="video-note"><span aria-hidden="true">▶</span><span><strong>Winslow walkthrough.</strong> An original Tracercoin guide — download and sync the wallet, back it up, encrypt it, and create your first TFX address.</span></p>
             </div>
             <div class="path-actions">
               <a class="btn btn-ghost btn-sm" href="/status/">See the latest release notes</a>
-              <a class="watch-link" href="https://www.youtube.com/watch?v=M3cNMiJ730c" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                Watch the wallet setup video
-              </a>
             </div>
           </div>
         </div>
@@ -298,17 +298,16 @@
             </ol>
             <div class="path-video">
               <div class="video-embed">
-                <iframe src="https://www.youtube-nocookie.com/embed/JoM5r5J8pOk" title="Scrypt Antminer pool mining setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <video class="video-player" controls preload="none" playsinline poster="/videos/tfx-mining.jpg">
+                  <source src="/videos/tfx-mining.mp4" type="video/mp4" />
+                  <a href="/videos/tfx-mining.mp4">Download the mining walkthrough (MP4)</a>
+                </video>
               </div>
-              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin is Scrypt proof-of-work, so this Antminer L3+ pool-setup guide covers the same worker, stratum, and pool steps — just point your rig at <span class="inline-code">pool.tracercoin.org:3333</span> instead. Official Tracercoin video coming at launch.</span></p>
+              <p class="video-note"><span aria-hidden="true">▶</span><span><strong>Winslow walkthrough.</strong> An original Tracercoin guide — pool vs. solo, get the pool details, and connect your Scrypt miner to <span class="inline-code">pool.tracercoin.org:3333</span>.</span></p>
             </div>
             <div class="path-actions">
               <a class="btn btn-primary btn-sm" href="/pool/">Full mining guide</a>
               <a class="btn btn-ghost btn-sm" href="/portal/">Open the miner portal</a>
-              <a class="watch-link" href="https://www.youtube.com/watch?v=JoM5r5J8pOk" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                Watch the mining setup video
-              </a>
             </div>
           </div>
         </div>
@@ -349,15 +348,15 @@
             </div>
             <div class="path-video">
               <div class="video-embed">
-                <iframe src="https://www.youtube-nocookie.com/embed/H9VMgP-yEjc" title="Full node setup walkthrough" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <video class="video-player" controls preload="none" playsinline poster="/videos/tfx-node.jpg">
+                  <source src="/videos/tfx-node.mp4" type="video/mp4" />
+                  <a href="/videos/tfx-node.mp4">Download the node walkthrough (MP4)</a>
+                </video>
               </div>
-              <p class="video-note"><span aria-hidden="true">ℹ️</span><span><strong>Interim walkthrough.</strong> Tracercoin runs the Litecoin Core node software, so this Litecoin node setup guide covers the same daemon, config, and sync steps — use <span class="inline-code">tracercoind</span> and <span class="inline-code">tracercoin.conf</span> in place of the Litecoin names. Official Tracercoin video coming at launch.</span></p>
+              <p class="video-note"><span aria-hidden="true">▶</span><span><strong>Winslow walkthrough.</strong> An original Tracercoin guide — desktop-wallet-as-node vs. the headless <span class="inline-code">tracercoind</span> daemon, <span class="inline-code">tracercoin.conf</span>, first sync, and CLI checks.</span></p>
             </div>
             <div class="path-actions">
-              <a class="watch-link" href="https://www.youtube.com/watch?v=H9VMgP-yEjc" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                Watch the node setup video
-              </a>
+              <a class="btn btn-ghost btn-sm" href="/status/">Node build notes &amp; releases</a>
             </div>
           </div>
         </div>
@@ -395,15 +394,14 @@
           <details class="faq-item">
             <summary>Where are the video guides?</summary>
             <div class="faq-body">
-              <p>All setup walkthroughs live on our <a href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">YouTube channel</a>. Subscribe to get notified when new guides are posted for each feature as it launches.</p>
+              <p>Every walkthrough plays right here on the page — see the <a href="#video-title">Winslow video walkthroughs</a> above and the video on each setup path. They're original Tracercoin guides, added to as each feature ships.</p>
             </div>
           </details>
         </div>
 
         <div class="callout" role="note" style="margin-top:26px;">
-          <strong>Still stuck?</strong> Watch the matching video on the
-          <a href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">YouTube channel</a>,
-          then <a href="#waitlist">join the waitlist</a> to reach the community as it comes online.
+          <strong>Still stuck?</strong> Watch the matching <a href="#paths">walkthrough video</a> for
+          that step, then <a href="#waitlist">join the waitlist</a> to reach the community as it comes online.
         </div>
       </div>
     </section>
