@@ -61,6 +61,15 @@
     .pool-param dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin: 0 0 6px; }
     .pool-param dd { margin: 0; font-family: var(--mono); font-size: 1.02rem; color: var(--accent-2); word-break: break-all; }
     .inline-code { font-family: var(--mono); font-size: .9em; color: var(--accent-2); background: var(--surface); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+    .bench { width: 100%; border-collapse: collapse; font-size: .94rem; margin: 6px 0 4px; }
+    .bench th, .bench td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+    .bench thead th { color: var(--text-dim); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+    .bench td { color: var(--text-soft); }
+    .bench tbody td:first-child { color: var(--text); font-weight: 600; }
+    .bench tbody td:nth-child(2) { font-family: var(--mono); color: var(--accent-2); white-space: nowrap; }
+    .bench tbody tr:hover { background: var(--bg-alt); }
+    .bench-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+    .hw-sub { margin: 30px 0 6px; font-size: 1.12rem; }
   </style>
 </head>
 <body>
@@ -182,6 +191,82 @@
               <span class="inline-code">bfgminer</span>, or your ASIC's built-in dashboard —
               anything that connects to a Stratum pool.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HARDWARE & BENCHMARKS ============ -->
+    <section id="hardware" class="section" aria-labelledby="hw-title">
+      <div class="container">
+        <p class="section-eyebrow">Hardware &amp; benchmarks</p>
+        <h2 id="hw-title" class="section-title">What can your rig do?</h2>
+        <p class="section-lead">
+          Tracercoin is <strong>Scrypt</strong> proof-of-work — the same algorithm as Litecoin and
+          Dogecoin — so any Scrypt-capable hardware works, and the wider Scrypt ecosystem is a good
+          yardstick for what to expect. The figures below are approximate reference numbers from
+          public Litecoin/Scrypt hardware data; your real results vary with firmware, tuning,
+          temperature, and power.
+        </p>
+
+        <h3 class="hw-sub">Scrypt ASIC miners — the efficient path</h3>
+        <div class="bench-wrap">
+          <table class="bench">
+            <thead><tr><th>Miner</th><th>Hashrate</th><th>Power</th><th>Efficiency</th></tr></thead>
+            <tbody>
+              <tr><td>Bitmain Antminer L9</td><td>15–17 GH/s</td><td>~3,150–3,400 W</td><td>~0.21 J/MH</td></tr>
+              <tr><td>Bitmain Antminer L7</td><td>9.05–9.5 GH/s</td><td>~3,260–3,425 W</td><td>~0.36 J/MH</td></tr>
+              <tr><td>Goldshell LT6</td><td>3.35 GH/s</td><td>~3,200 W</td><td>~0.95 J/MH</td></tr>
+              <tr><td>Goldshell LT5 Pro</td><td>2.46 GH/s</td><td>~2,080 W</td><td>~0.85 J/MH</td></tr>
+              <tr><td>Innosilicon A6+ LTCMaster</td><td>~2.2 GH/s</td><td>~2,100 W</td><td>~0.95 J/MH</td></tr>
+              <tr><td>Antminer L3++ / L3+</td><td>580 / 504 MH/s</td><td>~800–950 W</td><td>~1.6 J/MH</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mining-note">ASICs dominate Scrypt. If you're buying hardware to mine seriously, this is the class to look at.</p>
+
+        <h3 class="hw-sub">GPU &amp; CPU — great for testing your setup</h3>
+        <p class="section-lead" style="margin-bottom:12px;">
+          You can point a GPU — or even a CPU — at the pool to learn the flow and confirm your rig
+          connects and submits shares. Just know Scrypt is memory-hard and ASIC-dominated, so a
+          GPU or CPU is for <strong>testing and learning</strong>, not competitive output.
+        </p>
+        <div class="bench-wrap">
+          <table class="bench">
+            <thead><tr><th>Device</th><th>Approx. Scrypt hashrate</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>High-end AMD GPU (R9 290X-class)</td><td>~700–900 kH/s</td><td>Best of the GPU-era Scrypt numbers</td></tr>
+              <tr><td>NVIDIA GTX 780 Ti-class</td><td>~400–450 kH/s</td><td>Tuned cgminer / cudaminer</td></tr>
+              <tr><td>Mid-range GPU</td><td>~120–200 kH/s</td><td>Varies widely by card and tuning</td></tr>
+              <tr><td>Desktop CPU (multi-core)</td><td>~10–45 kH/s</td><td>Testing only — not competitive</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mining-note">Scale check: 1&nbsp;GH/s = 1,000&nbsp;MH/s = 1,000,000&nbsp;kH/s. One Antminer L7 (~9.5&nbsp;GH/s) is on the order of ten thousand times a tuned GPU — that gap is why Scrypt is an ASIC game.</p>
+
+        <h3 class="hw-sub">Benchmark your own rig</h3>
+        <p class="section-lead" style="margin-bottom:8px;">Two quick ways to measure your real Scrypt hashrate:</p>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3>Offline benchmark</h3>
+            <p>Run your Scrypt miner in benchmark mode — no pool, no wallet needed — to read raw hashrate. Compare it to the tables above.</p>
+            <div class="codeblock" role="group" aria-label="cgminer scrypt benchmark">
+              <div class="codeblock-head"><span>cgminer &middot; benchmark</span></div>
+              <pre>cgminer <span class="tok">--scrypt</span> <span class="tok">--benchmark</span>
+<span class="cmt"># bfgminer: bfgminer --scrypt --benchmark</span></pre>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3>Live on the pool</h3>
+            <p>Point your rig at <span class="inline-code">pool.tracercoin.org:3333</span>, then watch your live hashrate and accepted shares in the <a href="/portal/">miner portal</a> — that's your real, network-conditions number.</p>
+          </li>
+        </ol>
+
+        <div class="callout" role="note" style="margin-top:24px;">
+          <strong>Reference only.</strong> These are approximate capability figures from public
+          Litecoin/Scrypt sources to help you size and test hardware — not a promise of rewards or
+          profit. Actual output depends on your hardware, network difficulty, and energy cost.
         </div>
       </div>
     </section>
