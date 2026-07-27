@@ -178,6 +178,14 @@
           </div>
 
           <div class="codeblock">
+            <div class="codeblock-head"><span>bfgminer · command line</span><button class="copy-btn" type="button" data-copy="#c-bfg">Copy</button></div>
+            <pre id="c-bfg">bfgminer --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u tfx1youraddresshere.rig1 \
+  -p x</pre>
+          </div>
+
+          <div class="codeblock">
             <div class="codeblock-head"><span>generic stratum config</span><button class="copy-btn" type="button" data-copy="#c-json">Copy</button></div>
             <pre id="c-json">{
   "algo": "scrypt",
@@ -308,6 +316,12 @@ financial or price advice — just the technical setup.</pre>
             <div class="codeblock">
               <div class="codeblock-head"><span>bash</span><button class="copy-btn" type="button" data-copy="#p-cg">Copy</button></div>
               <pre id="p-cg">cgminer --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u tfx1youraddresshere.rig1 \
+  -p x
+
+# bfgminer — same Scrypt stratum settings:
+bfgminer --scrypt \
   -o stratum+tcp://pool.tracercoin.org:3333 \
   -u tfx1youraddresshere.rig1 \
   -p x</pre>
