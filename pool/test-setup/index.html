@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Your Mining Setup — Tracercoin (TFX)</title>
+  <meta name="description" content="Validate your Tracercoin miner setup with a series of checks: payout address, miner-portal account, a configured worker, the right pool settings, and whether your rig is submitting accepted shares." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0a0e14" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    .ts { max-width: 760px; margin: 0 auto; padding: 8px 22px 80px; }
+    .ts-lead { color: var(--text-soft); font-size: 1.05rem; margin: 0 0 8px; }
+
+    .checks { margin: 24px 0 8px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .check-row { display: grid; grid-template-columns: 42px 1fr; gap: 14px; padding: 18px 20px;
+      background: var(--surface); border-top: 1px solid var(--border); align-items: start; }
+    .check-row:first-child { border-top: 0; }
+    .ci { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex: none;
+      border: 1px solid var(--border-2); color: var(--text-dim); font-weight: 700; }
+    .ci.pending { color: var(--text-dim); }
+    .ci.pass { color: var(--success); border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.08); }
+    .ci.warn { color: #fab219; border-color: rgba(250,178,25,.45); background: rgba(250,178,25,.08); }
+    .ci.fail { color: var(--danger); border-color: rgba(248,113,113,.45); background: rgba(248,113,113,.08); }
+    .ci .spin { width: 16px; height: 16px; border: 2px solid var(--border-2); border-top-color: var(--accent-2);
+      border-radius: 50%; animation: sp .7s linear infinite; }
+    @keyframes sp { to { transform: rotate(360deg); } }
+    .check-title { font-weight: 600; color: var(--text); }
+    .check-detail { color: var(--text-soft); font-size: .94rem; margin-top: 4px; }
+    .check-detail a { color: var(--accent-2); }
+
+    .field { margin: 6px 0 0; }
+    .field input { width: 100%; padding: 11px 13px; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border-2); border-radius: var(--radius-sm); font: inherit; font-size: 1rem; font-family: var(--mono); }
+    .field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+    .params { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-top: 10px; }
+    .params .p { background: var(--bg); padding: 10px 12px; }
+    .params dt { font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); margin: 0 0 3px; }
+    .params dd { margin: 0; font-family: var(--mono); font-size: .9rem; color: var(--accent-2); word-break: break-all; }
+
+    .verdict { margin: 18px 0 0; padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--border-2);
+      background: var(--surface); }
+    .verdict.ok { border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.06); }
+    .verdict h3 { margin: 0 0 6px; }
+    .verdict p { margin: 0; color: var(--text-soft); }
+    .ts-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5eead4" /><stop offset="1" stop-color="#38bdf8" />
+            </linearGradient></defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li class="nav-has-dropdown">
+          <details class="nav-dropdown">
+            <summary>What is it
+              <svg class="caret" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <ul class="dropdown-menu">
+              <li><a href="/about/#what">What is Tracercoin?<small>The proof-of-work memory chain</small></a></li>
+              <li><a href="/about/#wallet">What is the Tracercoin wallet?<small>Hold, send &amp; receive TFX</small></a></li>
+              <li><a href="/about/#exchange">What is the Tracercoin exchange?<small>Trading TFX — what's planned</small></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/">Get started</a></li>
+        <li><a href="/pool/" aria-current="page">Mining</a></li>
+        <li data-tfx="auth-only"><a href="/status/">Status</a></li>
+        <li data-tfx="auth-only"><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="auth-only"><button type="button" class="btn btn-ghost btn-sm" data-tfx-logout>Sign out</button></li>
+        <li data-tfx="noauth-only"><a href="/portal/">Sign in</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="ts">
+        <p class="section-eyebrow">Test your setup</p>
+        <h1 class="section-title" style="margin-bottom:10px;">Is your miner set up correctly?</h1>
+        <p class="ts-lead">Run through the checks below. We'll validate your payout address, your miner-portal
+          account and worker, the pool settings, and — if you're signed in — whether the pool is actually
+          seeing accepted shares from your rig.</p>
+
+        <div class="checks" id="checks">
+          <!-- CHECK 1: address -->
+          <div class="check-row" data-check="addr">
+            <div class="ci pending" id="ci-addr" aria-hidden="true">1</div>
+            <div>
+              <div class="check-title">Payout address</div>
+              <div class="check-detail" id="d-addr">Paste the Tracercoin address your rewards should go to — it starts with <span class="inline-code">tfx1</span>.</div>
+              <div class="field"><input type="text" id="addr-input" placeholder="tfx1…" autocapitalize="none" spellcheck="false" autocomplete="off" /></div>
+            </div>
+          </div>
+          <!-- CHECK 2: portal account -->
+          <div class="check-row" data-check="account">
+            <div class="ci pending" id="ci-account" aria-hidden="true">2</div>
+            <div>
+              <div class="check-title">Miner-portal account</div>
+              <div class="check-detail" id="d-account">Checking whether you're signed in…</div>
+            </div>
+          </div>
+          <!-- CHECK 3: worker -->
+          <div class="check-row" data-check="worker">
+            <div class="ci pending" id="ci-worker" aria-hidden="true">3</div>
+            <div>
+              <div class="check-title">Worker configured</div>
+              <div class="check-detail" id="d-worker">A worker is the login your rig uses to connect.</div>
+            </div>
+          </div>
+          <!-- CHECK 4: pool settings -->
+          <div class="check-row" data-check="pool">
+            <div class="ci pending" id="ci-pool" aria-hidden="true">4</div>
+            <div>
+              <div class="check-title">Pool connection settings</div>
+              <div class="check-detail">Enter these exact values into your miner:</div>
+              <dl class="params">
+                <div class="p"><dt>Stratum URL</dt><dd>stratum+tcp://pool.tracercoin.org</dd></div>
+                <div class="p"><dt>Port</dt><dd>3333</dd></div>
+                <div class="p"><dt>Algorithm</dt><dd>Scrypt</dd></div>
+                <div class="p"><dt>Username</dt><dd>your-tfx1-address.worker</dd></div>
+                <div class="p"><dt>Password</dt><dd>x</dd></div>
+              </dl>
+            </div>
+          </div>
+          <!-- CHECK 5: live shares -->
+          <div class="check-row" data-check="live">
+            <div class="ci pending" id="ci-live" aria-hidden="true">5</div>
+            <div>
+              <div class="check-title">Is your rig submitting shares?</div>
+              <div class="check-detail" id="d-live">Sign in to the portal so we can check the pool for your worker's live activity.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="verdict" id="verdict" hidden>
+          <h3 id="v-title">—</h3>
+          <p id="v-text"></p>
+        </div>
+
+        <div class="ts-actions">
+          <button class="btn btn-primary" id="rerun">Re-run checks</button>
+          <a class="btn btn-ghost" href="/portal/">Open the miner portal</a>
+          <a class="btn btn-ghost" href="/pool/#hardware">Hardware &amp; benchmarks</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+  <script>
+    (function () {
+      "use strict";
+      var TOKEN = "tfx_portal_token";
+      function getTok() { try { return localStorage.getItem(TOKEN) || ""; } catch (e) { return ""; } }
+      function $(id) { return document.getElementById(id); }
+      function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+
+      var ICON = { pass: "✓", warn: "!", fail: "✕" };
+      function setCheck(name, state, html, n) {
+        var ci = $("ci-" + name), d = $("d-" + name);
+        ci.className = "ci " + state;
+        if (state === "running") { ci.classList.remove("running"); ci.className = "ci pending"; ci.innerHTML = '<span class="spin"></span>'; }
+        else ci.textContent = (state === "pending") ? (n || "") : (ICON[state] || "");
+        if (d && html != null) d.innerHTML = html;
+        results[name] = state;
+      }
+
+      function api(path) {
+        return fetch("/api/portal" + path, { headers: { "Accept": "application/json", "Authorization": "Bearer " + getTok() } })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) {
+            if (!r.ok) { var e = new Error(j.detail || ("Error " + r.status)); e.status = r.status; throw e; } return j; }); });
+      }
+
+      var results = {};
+      var ADDR_RE = /^tfx1[023456789acdefghjklmnpqrstuvwxyz]{25,87}$/; // bech32-ish, lenient
+
+      function checkAddr() {
+        var v = ($("addr-input").value || "").trim().toLowerCase();
+        if (!v) { setCheck("addr", "pending", 'Paste the Tracercoin address your rewards should go to — it starts with <span class="inline-code">tfx1</span>.', 1);
+          $("addr-input").parentNode.style.display = ""; renderVerdict(); return; }
+        if (ADDR_RE.test(v)) setCheck("addr", "pass", "That looks like a valid Tracercoin address. Use it as your worker username.");
+        else setCheck("addr", "fail", "That doesn't look like a <span class=\"inline-code\">tfx1</span> address. Generate one in the Tracercoin wallet.");
+        renderVerdict();
+      }
+
+      function runPortalChecks() {
+        var tok = getTok();
+        if (!tok) {
+          setCheck("account", "warn", 'You\'re not signed into the miner portal. <a href="/portal/">Sign in or create an account</a> — then re-run.');
+          setCheck("worker", "warn", 'Sign in first, then <a href="/portal/">add a worker</a> for your rig.');
+          setCheck("live", "warn", 'Sign in so we can check the pool for your worker\'s live shares.');
+          renderVerdict(); return;
+        }
+        setCheck("account", "running"); setCheck("worker", "running"); setCheck("live", "running");
+        api("/me").then(function (me) {
+          setCheck("account", "pass", "Signed in as <strong>" + esc(me.username) + "</strong>.");
+          return api("/workers");
+        }).then(function (w) {
+          var list = (w && w.workers) || [];
+          if (list.length) {
+            var logins = list.map(function (x) { return '<span class="inline-code">' + esc(x.login) + "</span>"; }).join(", ");
+            setCheck("worker", "pass", list.length + " worker" + (list.length > 1 ? "s" : "") + " configured: " + logins + ".");
+          } else {
+            setCheck("worker", "warn", 'No workers yet — <a href="/portal/">add one in the portal</a> to get a rig login.');
+          }
+          return api("/activity");
+        }).then(function (a) {
+          var workers = (a && a.workers) || [];
+          var online = workers.filter(function (x) { return x.online; });
+          var hasShares = workers.some(function (x) { return (x.shares_valid || 0) > 0; });
+          if (online.length && hasShares) {
+            setCheck("live", "pass", "Your rig is connected and the pool is accepting shares. You're mining correctly. 🎉");
+          } else if (workers.length) {
+            setCheck("live", "warn", "We can see your worker, but no accepted shares yet. If your miner is running, re-check the pool settings above — and note the pool may still be coming online during launch phase.");
+          } else {
+            setCheck("live", "warn", (a && a.note) ? esc(a.note) : "No worker activity from the pool yet. Start your miner with the settings above, then re-run this check.");
+          }
+          renderVerdict();
+        }).catch(function (err) {
+          if (err.status === 401) {
+            setCheck("account", "warn", 'Your portal session expired. <a href="/portal/">Sign in again</a>, then re-run.');
+            setCheck("worker", "warn", "Sign in to check your workers.");
+            setCheck("live", "warn", "Sign in to check live shares.");
+          } else {
+            setCheck("live", "warn", "Couldn't reach the pool right now. Try again in a moment.");
+          }
+          renderVerdict();
+        });
+      }
+
+      function renderVerdict() {
+        var v = $("verdict"), t = $("v-title"), p = $("v-text");
+        var core = [results.addr, results.account, results.worker];
+        var allCore = core.every(function (s) { return s === "pass"; });
+        var live = results.live;
+        if (allCore && live === "pass") {
+          v.hidden = false; v.className = "verdict ok";
+          t.textContent = "✓ You're set up correctly.";
+          p.textContent = "Address, account, worker, and live shares all check out. Watch your hashrate and payouts in the miner portal.";
+        } else if (results.addr === "fail" || results.account === "warn" || results.worker === "warn" || live === "warn") {
+          v.hidden = false; v.className = "verdict";
+          t.textContent = "Almost there — a few things to finish";
+          p.textContent = "Work through any amber or red checks above. Most setups just need a signed-in portal account with a worker, and a running miner pointed at the pool settings shown.";
+        } else {
+          v.hidden = true;
+        }
+      }
+
+      $("addr-input").addEventListener("input", checkAddr);
+      $("rerun").addEventListener("click", function () { checkAddr(); runPortalChecks(); });
+
+      // initial run
+      checkAddr();
+      runPortalChecks();
+    })();
+  </script>
+</body>
+</html>
