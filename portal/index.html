@@ -122,10 +122,31 @@
         </span>
         <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
       </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
       <ul class="nav-links" id="nav-links">
-        <li><a href="/#what">What it is</a></li>
+        <li class="nav-has-dropdown">
+          <details class="nav-dropdown">
+            <summary>What is it
+              <svg class="caret" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <ul class="dropdown-menu">
+              <li><a href="/about/#what">What is Tracercoin?<small>The proof-of-work memory chain</small></a></li>
+              <li><a href="/about/#wallet">What is the Tracercoin wallet?<small>Hold, send &amp; receive TFX</small></a></li>
+              <li><a href="/about/#exchange">What is the Tracercoin exchange?<small>Trading TFX — what's planned</small></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/">Get started</a></li>
         <li><a href="/pool/">Mining</a></li>
-        <li><a href="/portal/" aria-current="page">Miner portal</a></li>
+        <li data-tfx="auth-only"><a href="/status/">Status</a></li>
+        <li data-tfx="auth-only"><a href="/portal/" aria-current="page">Miner portal</a></li>
+        <li data-tfx="auth-only"><button type="button" class="btn btn-ghost btn-sm" data-tfx-logout>Sign out</button></li>
+        <li data-tfx="noauth-only"><a href="/portal/" aria-current="page">Sign in</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
       </ul>
     </nav>
   </header>
@@ -371,6 +392,7 @@
     </div>
   </footer>
 
+  <script src="/js/main.js" defer></script>
   <script src="/js/portal.js" defer></script>
 </body>
 </html>

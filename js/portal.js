@@ -17,7 +17,12 @@ var TOKEN_KEY = "tfx_portal_token";
   function show(el) { el.classList.remove("hidden"); }
   function hide(el) { el.classList.add("hidden"); }
   function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
-  function setToken(t) { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+  function setToken(t) {
+    try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    // Re-apply the shared header state (data-tfx-auth/reg) so the nav flips
+    // between guest and signed-in immediately — no page reload needed.
+    if (window.TFXAuth && window.TFXAuth.refresh) window.TFXAuth.refresh();
+  }
   function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
 
   function status(el, msg, type) {

@@ -1,12 +1,12 @@
 {
-  "as_of": "2026-07-26",
-  "headline": "Tracercoin.org is live, secure, and taking signups.",
-  "summary": "The public site, waitlist, and miner portal are deployed on production infrastructure with HTTPS. The remaining work is content — rendering our own how-to videos to replace interim placeholders.",
+  "as_of": "2026-07-27",
+  "headline": "Real wallet and consensus treasury fee are live — mainnet is in launch phase.",
+  "summary": "The public site, waitlist, and miner portal are fully deployed on production with HTTPS. The real Windows wallet installer (release candidate) is published with a verified checksum, and the 2% consensus treasury fee is implemented and verified. Remaining before the mainnet block-1 launch: Windows code-signing, the production pool cutover, and rendering our own how-to videos to replace the interim placeholders.",
   "overall_state": "on-track",
   "workstreams": [
     {
       "name": "Public website",
-      "detail": "Home, waitlist, pool, start guide, portal",
+      "detail": "Get-started home, about, pool, status, miner portal",
       "percent": 100,
       "state": "shipped"
     },
@@ -24,15 +24,27 @@
     },
     {
       "name": "Miner portal",
-      "detail": "Portal login and connection details",
+      "detail": "Account login, workers, payouts, 2FA",
+      "percent": 100,
+      "state": "shipped"
+    },
+    {
+      "name": "Desktop wallet (real build)",
+      "detail": "Windows installer, release candidate, checksum published",
       "percent": 90,
       "state": "in-progress"
     },
     {
-      "name": "YouTube automation",
-      "detail": "@Tracercoin channel, API-managed uploads",
+      "name": "Consensus treasury fee",
+      "detail": "2% per block to the disclosed treasury; enforced by nodes",
       "percent": 100,
       "state": "shipped"
+    },
+    {
+      "name": "Mining pool integration",
+      "detail": "Worker auth, share accounting, on-chain payouts",
+      "percent": 70,
+      "state": "in-progress"
     },
     {
       "name": "How-to video content",
@@ -42,9 +54,9 @@
     }
   ],
   "next_milestones": [
-    "Render the core how-to videos (wallet, mining, node, plus guides)",
-    "Upload via the live @Tracercoin API pipeline and capture new video IDs",
-    "Swap the interim placeholder embeds on the start guide",
-    "Finish miner-portal polish to 100%"
+    "Code-sign the Windows wallet installer and promote it from release candidate",
+    "Complete the production pool cutover (cross-box worker auth and payouts)",
+    "Mine mainnet block 1 (deliberate, disclosed premine to the treasury) to open the chain",
+    "Render the core how-to videos and swap the interim placeholder embeds"
   ]
 }

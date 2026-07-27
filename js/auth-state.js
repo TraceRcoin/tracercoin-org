@@ -70,6 +70,37 @@
     fillNumbers(waitlistNumber());
   }
 
+  // ---- Global logout (header "Log out", shown on every page when signed in) ----
+  // Clears the portal token, best-effort invalidates it server-side, then
+  // reloads so the current page renders its signed-out view.
+  function doLogout(ev) {
+    if (ev) ev.preventDefault();
+    var tok = read(LS_TOKEN);
+    try { localStorage.removeItem(LS_TOKEN); } catch (e) {}
+    apply();
+    var done = false;
+    var go = function () { if (done) return; done = true; window.location.reload(); };
+    if (tok) {
+      setTimeout(go, 1500); // don't hang if the network is slow
+      try {
+        fetch("/api/portal/logout", { method: "POST", headers: { "Authorization": "Bearer " + tok } })
+          .then(go, go);
+      } catch (e) { go(); }
+    } else {
+      go();
+    }
+  }
+
+  function wireLogout() {
+    var btns = document.querySelectorAll("[data-tfx-logout]");
+    for (var i = 0; i < btns.length; i++) btns[i].addEventListener("click", doLogout);
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wireLogout);
+  } else {
+    wireLogout();
+  }
+
   // Public hook so the waitlist form can flip state live after a
   // successful POST /api/waitlist (number assigned by the DB).
   window.TFXAuth = {
@@ -77,6 +108,7 @@
       try { localStorage.setItem(LS_WAITLIST, JSON.stringify({ number: num, at: Date.now() })); } catch (e) {}
       apply();
     },
+    logout: doLogout,
     refresh: apply
   };
 })();

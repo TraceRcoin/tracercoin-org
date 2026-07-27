@@ -1,6 +1,42 @@
 {
   "notes": [
     {
+      "version": "Desktop wallet",
+      "date": "2026-07-27",
+      "title": "The real Tracercoin wallet is here",
+      "tags": ["release", "wallet"],
+      "items": [
+        "A real Windows installer for Tracercoin Core is published as a release candidate.",
+        "Every release lists a SHA-256 checksum — verify the download before you run it.",
+        "This replaces the interim Litecoin-based brand-test build with genuine Tracercoin binaries.",
+        "Prerequisites ship with the release so you have everything needed at install time.",
+        "The build is not yet code-signed; Windows may warn on first run until signing lands."
+      ]
+    },
+    {
+      "version": "Consensus",
+      "date": "2026-07-27",
+      "title": "A transparent treasury fee, enforced by the network",
+      "tags": ["feature", "consensus"],
+      "items": [
+        "Two percent of every block now routes to the disclosed development treasury.",
+        "The first block pays the full, publicly disclosed development allocation to the treasury.",
+        "Nodes reject any block that does not pay the treasury correctly — the rule is consensus-enforced.",
+        "This keeps the fair-launch development allocation transparent from block one."
+      ]
+    },
+    {
+      "version": "Site",
+      "date": "2026-07-27",
+      "title": "The site now leads with getting started",
+      "tags": ["improvement", "site"],
+      "items": [
+        "The Get Started guide is now the tracercoin.org home page.",
+        "The project overview — what it is, fingerprints, and specs — moved to /about/.",
+        "The waitlist signup lives on the home page, and this status board is one click away."
+      ]
+    },
+    {
       "version": "Waitlist positions",
       "date": "2026-07-26",
       "title": "See your place in line",

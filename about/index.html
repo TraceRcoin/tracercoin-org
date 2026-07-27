@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Tracercoin (TFX) — A Proof-of-Work Memory Chain</title>
+  <meta name="description" content="What Tracercoin (TFX) is: a Scrypt proof-of-work cryptocurrency and a permanent memory chain. File a fingerprint to prove content existed and was never altered. Fair-launch, community-mined." />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="About Tracercoin (TFX) — A Proof-of-Work Memory Chain" />
+  <meta property="og:description" content="A Scrypt proof-of-work cryptocurrency and a permanent, tamper-proof memory chain. Fair-launch, community-mined." />
+  <meta property="og:url" content="https://tracercoin.org/about/" />
+  <meta property="og:image" content="/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0a0e14" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint so registered visitors never flash the join UI -->
+  <script src="/js/auth-state.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5eead4" />
+                <stop offset="1" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li class="nav-has-dropdown">
+          <details class="nav-dropdown">
+            <summary>What is it
+              <svg class="caret" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <ul class="dropdown-menu">
+              <li><a href="/about/#what">What is Tracercoin?<small>The proof-of-work memory chain</small></a></li>
+              <li><a href="/about/#wallet">What is the Tracercoin wallet?<small>Hold, send &amp; receive TFX</small></a></li>
+              <li><a href="/about/#exchange">What is the Tracercoin exchange?<small>Trading TFX — what's planned</small></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/">Get started</a></li>
+        <li><a href="/pool/">Mining</a></li>
+        <li data-tfx="auth-only"><a href="/status/">Status</a></li>
+        <li data-tfx="auth-only"><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="auth-only"><button type="button" class="btn btn-ghost btn-sm" data-tfx-logout>Sign out</button></li>
+        <li data-tfx="noauth-only"><a href="/portal/">Sign in</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="eyebrow">Scrypt proof-of-work &middot; fair launch</p>
+        <h1 id="hero-title">A proof-of-work<br /><span class="grad-text">memory chain.</span></h1>
+        <p class="hero-sub">
+          Tracercoin (TFX) is a Scrypt proof-of-work cryptocurrency where anyone can file a
+          <strong>fingerprint</strong> — a compact, permanent, tamper-proof record that proves a
+          piece of content existed and was never altered.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="/">Get started</a>
+          <a class="btn btn-ghost" href="#fingerprints">See how it works</a>
+        </div>
+        <p class="hero-note">The mainnet is in launch phase. Set up now — or join the waitlist to be notified at each milestone. No payment, no token sale.</p>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IT IS ============ -->
+    <section id="what" class="section" aria-labelledby="what-title">
+      <div class="container">
+        <p class="section-eyebrow">What it is</p>
+        <h2 id="what-title" class="section-title">Two chains in one: money and memory</h2>
+        <p class="section-lead">
+          Tracercoin is built on the proven Litecoin model — Scrypt proof-of-work, mineable with
+          standard Scrypt hardware. Beyond sending and receiving TFX, the chain does one more thing:
+          it remembers.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2 2 7l10 5 10-5-10-5Z M2 17l10 5 10-5 M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Proof-of-work chain</h3>
+            <p>A Scrypt PoW cryptocurrency on the Litecoin model, secured by miners around the world. No pre-sale, no gatekeepers — blocks are earned.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2a5 5 0 0 0-5 5v3a7 7 0 1 0 10 0V7a5 5 0 0 0-5-5Z M9 11v-4a3 3 0 0 1 6 0v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Permanent memory</h3>
+            <p>File a fingerprint of any content. As long as the chain is maintained, that record can never be altered or forged — a tamper-proof timestamp for the truth.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 22c5-2 8-6 8-11V5l-8-3-8 3v6c0 5 3 9 8 11Z M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Efficiency-first</h3>
+            <p>Only a tiny cryptographic proof goes on-chain — never the content itself. The chain stays lean; your files stay yours.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINGERPRINTS / HOW IT WORKS ============ -->
+    <section id="fingerprints" class="section section-alt" aria-labelledby="fp-title">
+      <div class="container">
+        <p class="section-eyebrow">How fingerprints work</p>
+        <h2 id="fp-title" class="section-title">File once. Verify forever.</h2>
+        <p class="section-lead">
+          A fingerprint is a compact cryptographic proof of existence. It doesn't store your content —
+          it stores a mathematical signature of it, anchored permanently in a block.
+        </p>
+
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3>File</h3>
+            <p>Your wallet computes a compact hash of the content on your device. The content never leaves your machine — only the proof is broadcast. Filing costs a small TFX fee.</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3>Compact proof on-chain</h3>
+            <p>The fingerprint is written into a block as a tiny, provably-unspendable record. Once buried under proof-of-work, it becomes permanent and immutable.</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">3</div>
+            <h3>Verify forever</h3>
+            <p>Anyone can re-hash the original content and look it up in the explorer. A match proves that exact content existed — unaltered — as of the block's timestamp.</p>
+          </li>
+        </ol>
+
+        <div class="callout" role="note">
+          <strong>What a fingerprint proves:</strong> that a specific piece of content existed and has
+          not been changed since a given block time. It does <em>not</em> assert authorship, ownership,
+          or the meaning of the content — only its existence and integrity.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SPECS ============ -->
+    <section id="specs" class="section" aria-labelledby="specs-title">
+      <div class="container">
+        <p class="section-eyebrow">The coin</p>
+        <h2 id="specs-title" class="section-title">Built on proven proof-of-work</h2>
+        <p class="section-lead">
+          Tracercoin forks the Litecoin model and keeps what works: Scrypt mining, fast blocks, and a
+          fixed, predictable supply schedule.
+        </p>
+
+        <dl class="stats" aria-label="Tracercoin technical specifications">
+          <div class="stat">
+            <dt>Max supply</dt>
+            <dd><span class="stat-num">840M</span><span class="stat-unit">TFX</span></dd>
+          </div>
+          <div class="stat">
+            <dt>Block time</dt>
+            <dd><span class="stat-num">2.5</span><span class="stat-unit">minutes</span></dd>
+          </div>
+          <div class="stat">
+            <dt>Algorithm</dt>
+            <dd><span class="stat-num">Scrypt</span><span class="stat-unit">PoW</span></dd>
+          </div>
+          <div class="stat">
+            <dt>Block reward</dt>
+            <dd><span class="stat-num">400</span><span class="stat-unit">TFX at launch</span></dd>
+          </div>
+          <div class="stat">
+            <dt>Halving</dt>
+            <dd><span class="stat-num">840k</span><span class="stat-unit">blocks</span></dd>
+          </div>
+          <div class="stat">
+            <dt>Genesis message</dt>
+            <dd><span class="stat-quote">&ldquo;Trust is the foundation of progress.&rdquo;</span></dd>
+          </div>
+        </dl>
+
+        <div class="fairlaunch">
+          <div class="fairlaunch-text">
+            <h3>A fair launch, by design</h3>
+            <p>
+              80% of the supply is mined by the community. A 20% development allocation is fully
+              disclosed and vested — transparent from block one, never sold privately before launch.
+              Tracercoin is a mining community at its core.
+            </p>
+          </div>
+          <div class="fairlaunch-bar" role="img" aria-label="Supply split: 80 percent community-mined, 20 percent disclosed and vested development allocation">
+            <div class="bar">
+              <span class="bar-mined" style="width:80%"><span class="bar-label">80% community-mined</span></span>
+              <span class="bar-dev" style="width:20%"><span class="bar-label">20% disclosed &amp; vested</span></span>
+            </div>
+          </div>
+        </div>
+
+        <p class="mining-note">
+          Mineable with standard Scrypt hardware — ASIC miners such as the Antminer L7 and L3+, as well as GPUs.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IS THE WALLET ============ -->
+    <section id="wallet" class="section section-alt" aria-labelledby="wallet-title">
+      <div class="container">
+        <p class="section-eyebrow">The wallet</p>
+        <h2 id="wallet-title" class="section-title">What is the Tracercoin wallet?</h2>
+        <p class="section-lead">
+          The Tracercoin wallet — Tracercoin Core — is a desktop app you run on your own computer. It
+          is your key to the network: it holds your private keys, keeps a copy of the chain, and lets
+          you send and receive TFX.
+        </p>
+        <div class="cards">
+          <article class="card">
+            <h3>Your keys, your coins</h3>
+            <p>The wallet generates and stores your keys locally. Whoever holds the keys controls the TFX — so you encrypt it with a passphrase and back it up offline.</p>
+          </article>
+          <article class="card">
+            <h3>Send &amp; receive TFX</h3>
+            <p>Generate a <span class="inline-code">tfx…</span> address to receive coins, and pay any address to send. Mining rewards land in the address you choose.</p>
+          </article>
+          <article class="card">
+            <h3>File fingerprints</h3>
+            <p>Because Tracercoin is a memory chain, the wallet is also how you file a fingerprint — a permanent, tamper-proof proof that a piece of content existed.</p>
+          </article>
+        </div>
+        <p class="mining-note">
+          A real Windows installer is available now as a release candidate, with a published checksum to verify before you run it.
+          <a href="/">Get started with the wallet</a>, or check the <a href="/status/">release notes</a> for the current build.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IS THE EXCHANGE ============ -->
+    <section id="exchange" class="section" aria-labelledby="exchange-title">
+      <div class="container">
+        <p class="section-eyebrow">The exchange</p>
+        <h2 id="exchange-title" class="section-title">What is the Tracercoin exchange?</h2>
+        <p class="section-lead">
+          An exchange is where a coin is traded for other assets. A Tracercoin exchange is on the
+          roadmap — a place to trade TFX once the network is established and there is liquidity to
+          support it.
+        </p>
+        <div class="callout" role="note">
+          <strong>Not live yet — and nothing is for sale.</strong> There is no Tracercoin exchange,
+          listing, presale, or token sale today. Right now TFX is earned only by mining. If and when an
+          exchange or a third-party listing becomes available, we'll announce it here and in the
+          <a href="/status/">release notes</a>. Nothing on this site is financial advice or an offer to buy or sell.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WAITLIST CTA (form lives on the home page) ============ -->
+    <section id="waitlist" class="section section-alt" aria-labelledby="wl-title">
+      <div class="container narrow">
+
+      <!-- Already registered / on the list: show their waitlist number -->
+      <div data-tfx="reg-only" style="text-align:center;">
+        <p class="section-eyebrow">You're on the waitlist</p>
+        <h2 class="section-title">You're on the list</h2>
+        <p class="section-lead" style="margin:0 auto;">
+          Thanks for pre-registering. We'll notify you as development milestones are reached and the
+          moment the chain goes live — no further action needed.
+        </p>
+        <div class="waitlist-badge" data-tfx="list-only">
+          <span class="waitlist-badge-label">Your waitlist number</span>
+          <span class="waitlist-badge-num" data-tfx-number>#—</span>
+        </div>
+      </div>
+
+      <!-- New visitor: point to the join form on the home page -->
+      <div data-tfx="anon-only" style="text-align:center;">
+        <p class="section-eyebrow">Pre-registration</p>
+        <h2 id="wl-title" class="section-title">Join the waitlist</h2>
+        <p class="section-lead" style="margin:0 auto 24px;">
+          Follow Tracercoin's development and be notified when the chain goes live. Register with your
+          email or cell phone — an information waitlist only, no payment, no token sale.
+        </p>
+        <a class="btn btn-primary" href="/#waitlist">Join the waitlist</a>
+      </div>
+
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq" class="section" aria-labelledby="faq-title">
+      <div class="container narrow">
+        <p class="section-eyebrow">Questions</p>
+        <h2 id="faq-title" class="section-title">Frequently asked</h2>
+
+        <div class="faq">
+          <details class="faq-item">
+            <summary>What is Tracercoin?</summary>
+            <div class="faq-body">
+              <p>Tracercoin (TFX) is a Scrypt proof-of-work cryptocurrency built on the Litecoin model. It also functions as a permanent memory chain: anyone can file a fingerprint — a compact, tamper-proof record that proves a piece of content existed and was never altered.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is a fingerprint?</summary>
+            <div class="faq-body">
+              <p>A fingerprint is a compact cryptographic proof of a piece of content. Your wallet hashes the content locally and writes only that tiny proof to the blockchain. Later, anyone can re-hash the original content and confirm it matches the on-chain record — proving the content existed, unaltered, as of that block's timestamp.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is my content stored on the blockchain?</summary>
+            <div class="faq-body">
+              <p>No. Only a small proof is written on-chain — never the content itself. This keeps the chain efficient and keeps your files private and in your control. The proof-of-existence holds regardless of where you store the original.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How is TFX mined?</summary>
+            <div class="faq-body">
+              <p>Tracercoin uses Scrypt proof-of-work, so it can be mined with standard Scrypt hardware such as the Antminer L7 and L3+, or with GPUs. Blocks target 2.5 minutes, with a starting reward of 400 TFX that halves every 840,000 blocks.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What does &ldquo;fair launch&rdquo; mean here?</summary>
+            <div class="faq-body">
+              <p>80% of the 840,000,000 TFX max supply is mined by the community. A 20% development allocation is fully disclosed and vested — transparent from the genesis block and not sold privately ahead of launch. The genesis block carries the message: &ldquo;Trust is the foundation of progress.&rdquo;</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I buy TFX now?</summary>
+            <div class="faq-body">
+              <p>No. There is no token sale, presale, or payment of any kind. TFX is earned by mining once the network is live. Join the waitlist to follow development and be notified as the chain launches.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>When does it launch?</summary>
+            <div class="faq-body">
+              <p>The mainnet is in its launch phase and the wallet, pool, and node tools are coming online. <a href="/">Get started</a> now, or join the waitlist and we'll notify you as milestones are reached.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+          <p class="footer-tag">A proof-of-work memory chain.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/">Get started</a>
+          <a href="#what">What it is</a>
+          <a href="#fingerprints">Fingerprints</a>
+          <a href="#specs">Specs</a>
+          <a href="/pool/">Mining</a>
+          <a href="/status/">Status</a>
+          <a href="/portal/">Miner portal</a>
+          <a href="/#waitlist" data-tfx="anon-only">Waitlist</a>
+        </nav>
+      </div>
+
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Nothing on this site is financial, legal, or tax advice.
+          No tokens are for sale, and this site does not solicit money; it is an information waitlist only.
+          Cryptocurrency and mining involve risk and may be subject to regulation in your jurisdiction.
+          Do your own research.
+        </p>
+      </div>
+
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>
