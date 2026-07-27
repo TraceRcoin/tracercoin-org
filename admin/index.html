@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support Admin — Tracercoin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a0e14" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    .admin-wrap { max-width: 1080px; margin: 0 auto; padding: 30px 22px 80px; }
+    .admin-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 22px; }
+    .admin-head h1 { font-size: 1.4rem; margin: 0; }
+
+    .login-card { max-width: 420px; margin: 60px auto; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 30px 28px; box-shadow: var(--shadow); }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: .92rem; margin-bottom: 6px; color: var(--text-soft); }
+    .field input, .field select, .field textarea { width: 100%; padding: 11px 13px; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border-2); border-radius: var(--radius-sm); font: inherit; font-size: 1rem; }
+    .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .stat { background: var(--surface); padding: 14px 16px; }
+    .stat dt { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin: 0 0 4px; }
+    .stat dd { margin: 0; font-size: 1.4rem; font-weight: 700; font-family: var(--mono); color: var(--text); }
+    .stat dd.accent { color: var(--accent-2); }
+
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .toolbar select { width: auto; padding: 8px 12px; }
+    .toolbar .spacer { flex: 1; }
+
+    .req { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; margin-bottom: 12px; }
+    .req.closed { opacity: .6; }
+    .req-top { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .badge { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .05em;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border-2); color: var(--text-soft); }
+    .badge.t-service { color: var(--accent-2); border-color: var(--accent-2); }
+    .badge.t-license { color: #c4b5fd; border-color: #8b7cf6; }
+    .badge.t-password { color: #fab219; border-color: #fab219; }
+    .badge.t-support, .badge.t-other { color: var(--text-soft); }
+    .badge.s-new { color: var(--accent); border-color: var(--accent); }
+    .badge.s-open { color: #fab219; border-color: #fab219; }
+    .badge.s-closed { color: var(--text-dim); }
+    .req-when { color: var(--text-dim); font-size: .82rem; font-family: var(--mono); margin-left: auto; }
+    .req-who { margin: 10px 0 4px; font-size: .96rem; }
+    .req-who b { color: var(--accent-2); }
+    .req-contact { font-family: var(--mono); font-size: .9rem; color: var(--text); }
+    .req-msg { color: var(--text-soft); font-size: .95rem; margin: 8px 0 0; white-space: pre-wrap; }
+    .req-meta { color: var(--text-dim); font-size: .85rem; margin: 6px 0 0; }
+    .req-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .muted { color: var(--text-dim); }
+    .empty { color: var(--text-dim); padding: 30px 4px; text-align: center; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+      <ul class="nav-links"><li><a href="/">Home</a></li></ul>
+    </nav>
+  </header>
+
+  <main class="admin-wrap">
+    <!-- LOGIN -->
+    <section id="login-view">
+      <div class="login-card">
+        <p class="section-eyebrow">Administrator</p>
+        <h1 style="margin:0 0 8px;">Support panel</h1>
+        <p class="muted" style="margin:0 0 18px;font-size:.92rem;">Enter the admin key to view and triage inbound requests.</p>
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="admin-key">Admin key</label>
+            <input type="password" id="admin-key" autocomplete="off" autocapitalize="none" spellcheck="false" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="login-btn">Open panel</button>
+          <p class="form-status" id="login-status" role="status" aria-live="polite" style="margin-top:10px;"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dash-view" class="hidden">
+      <div class="admin-head">
+        <h1>Support requests</h1>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost btn-sm" id="refresh-btn">Refresh</button>
+          <button class="btn btn-ghost btn-sm" id="logout-btn">Sign out</button>
+        </div>
+      </div>
+
+      <dl class="stat-row" aria-label="Request counts">
+        <div class="stat"><dt>New</dt><dd id="c-new" class="accent">0</dd></div>
+        <div class="stat"><dt>Open</dt><dd id="c-open">0</dd></div>
+        <div class="stat"><dt>Closed</dt><dd id="c-closed">0</dd></div>
+        <div class="stat"><dt>Total</dt><dd id="c-total">0</dd></div>
+      </dl>
+
+      <div class="toolbar">
+        <label class="muted" for="f-status" style="font-size:.85rem;">Status</label>
+        <select id="f-status">
+          <option value="">All open</option>
+          <option value="new">New</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+        <label class="muted" for="f-type" style="font-size:.85rem;">Type</label>
+        <select id="f-type">
+          <option value="">All types</option>
+          <option value="service">Service</option>
+          <option value="license">License</option>
+          <option value="password">Password</option>
+          <option value="support">Support</option>
+          <option value="other">Other</option>
+        </select>
+        <span class="spacer"></span>
+        <span class="muted" id="list-status" style="font-size:.85rem;"></span>
+      </div>
+
+      <div id="list"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      var LS = "tfx_admin_key";
+      var $ = function (id) { return document.getElementById(id); };
+      function getKey() { try { return localStorage.getItem(LS) || ""; } catch (e) { return ""; } }
+      function setKey(k) { try { k ? localStorage.setItem(LS, k) : localStorage.removeItem(LS); } catch (e) {} }
+      function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+      function fmt(iso) { if (!iso) return "—"; try { return new Date(iso).toLocaleString(); } catch (e) { return iso; } }
+
+      function api(path, opts) {
+        opts = opts || {};
+        var h = { "Accept": "application/json", "Authorization": "Bearer " + getKey() };
+        if (opts.body) h["Content-Type"] = "application/json";
+        return fetch("/api/admin" + path, { method: opts.method || "GET", headers: h,
+          body: opts.body ? JSON.stringify(opts.body) : undefined })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) {
+            if (!r.ok) { var e = new Error(d.detail || ("Error " + r.status)); e.status = r.status; throw e; } return d; }); });
+      }
+
+      var loginView = $("login-view"), dashView = $("dash-view");
+      function showLogin(msg) {
+        loginView.classList.remove("hidden"); dashView.classList.add("hidden");
+        var st = $("login-status"); st.className = "form-status" + (msg ? " is-error" : ""); st.textContent = msg || "";
+      }
+      function showDash() { loginView.classList.add("hidden"); dashView.classList.remove("hidden"); loadAll(); }
+
+      $("login-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var k = $("admin-key").value.trim();
+        if (!k) { showLogin("Enter the admin key."); return; }
+        setKey(k);
+        $("login-status").textContent = "Checking…"; $("login-status").className = "form-status";
+        api("/support/summary").then(function () { showDash(); })
+          .catch(function (err) { setKey(""); showLogin(err.status === 401 ? "That key wasn't accepted." : (err.message || "Couldn't reach the server.")); });
+      });
+
+      $("logout-btn").addEventListener("click", function () { setKey(""); showLogin(""); });
+      $("refresh-btn").addEventListener("click", loadAll);
+      $("f-status").addEventListener("change", loadAll);
+      $("f-type").addEventListener("change", loadAll);
+
+      function typeBadge(t) { return '<span class="badge t-' + esc(t) + '">' + esc(t) + '</span>'; }
+      function statusBadge(s) { return '<span class="badge s-' + esc(s) + '">' + esc(s) + '</span>'; }
+
+      function render(reqs) {
+        var host = $("list");
+        if (!reqs.length) { host.innerHTML = '<p class="empty">No requests here.</p>'; return; }
+        host.innerHTML = reqs.map(function (r) {
+          var acts = "";
+          if (r.status !== "new") acts += '<button class="btn btn-ghost btn-sm" data-act="new" data-id="' + r.id + '">Mark new</button>';
+          if (r.status !== "open") acts += '<button class="btn btn-ghost btn-sm" data-act="open" data-id="' + r.id + '">Mark open</button>';
+          if (r.status !== "closed") acts += '<button class="btn btn-ghost btn-sm" data-act="closed" data-id="' + r.id + '">Close</button>';
+          acts += '<button class="btn btn-ghost btn-sm" data-act="note" data-id="' + r.id + '">Note</button>';
+          return '<div class="req ' + (r.status === "closed" ? "closed" : "") + '">' +
+            '<div class="req-top">' + typeBadge(r.type) + statusBadge(r.status) +
+              '<span class="req-when">#' + r.id + ' · ' + esc(fmt(r.created_at)) + '</span></div>' +
+            '<p class="req-who"><b>' + esc(r.name || "—") + '</b>' + (r.subject ? ' — ' + esc(r.subject) : '') + '</p>' +
+            '<p class="req-contact">' + esc(r.contact || "—") + '</p>' +
+            (r.message ? '<p class="req-msg">' + esc(r.message) + '</p>' : '') +
+            (r.meta ? '<p class="req-meta">' + esc(r.meta) + '</p>' : '') +
+            (r.admin_note ? '<p class="req-meta">📝 ' + esc(r.admin_note) + '</p>' : '') +
+            '<div class="req-actions">' + acts + '</div></div>';
+        }).join("");
+        Array.prototype.forEach.call(host.querySelectorAll("[data-act]"), function (b) {
+          b.addEventListener("click", function () {
+            var id = b.getAttribute("data-id"), act = b.getAttribute("data-act");
+            if (act === "note") {
+              var note = window.prompt("Admin note for #" + id + ":", "");
+              if (note === null) return;
+              patch(id, { admin_note: note });
+            } else { patch(id, { status: act }); }
+          });
+        });
+      }
+
+      function patch(id, body) {
+        api("/support/" + id, { method: "PATCH", body: body }).then(loadAll)
+          .catch(function (err) { if (err.status === 401) { setKey(""); showLogin("Session expired — sign in again."); }
+            else $("list-status").textContent = err.message || "Update failed."; });
+      }
+
+      function loadAll() {
+        $("list-status").textContent = "Loading…";
+        var st = $("f-status").value, ty = $("f-type").value;
+        var qs = [];
+        if (st) qs.push("status=" + encodeURIComponent(st));
+        if (ty) qs.push("type=" + encodeURIComponent(ty));
+        Promise.all([
+          api("/support/summary"),
+          api("/support" + (qs.length ? "?" + qs.join("&") : ""))
+        ]).then(function (res) {
+          var s = res[0];
+          $("c-new").textContent = s.new; $("c-open").textContent = s.open;
+          $("c-closed").textContent = s.closed; $("c-total").textContent = s.total;
+          var reqs = res[1].requests || [];
+          // default view "All open" = hide closed unless a filter explicitly asks
+          if (!st) reqs = reqs.filter(function (r) { return r.status !== "closed"; });
+          render(reqs);
+          $("list-status").textContent = reqs.length + " shown";
+        }).catch(function (err) {
+          if (err.status === 401) { setKey(""); showLogin("Session expired — sign in again."); }
+          else $("list-status").textContent = err.message || "Couldn't load.";
+        });
+      }
+
+      // boot
+      if (getKey()) { api("/support/summary").then(showDash).catch(function () { setKey(""); showLogin(""); }); }
+      else showLogin("");
+    })();
+  </script>
+</body>
+</html>

@@ -426,7 +426,8 @@ listen=1
         ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(ta);
       }
 
-      // "Do it for me" — compose a setup request to the media inbox.
+      // "Do it for me" — send the setup request into the site's own support queue
+      // (viewed by an administrator at /admin/). No email; it lands in the panel.
       var form = document.getElementById("service-form");
       if (form) {
         form.addEventListener("submit", function (e) {
@@ -437,16 +438,26 @@ listen=1
           var rig = document.getElementById("s-rig").value.trim();
           var msg = document.getElementById("s-msg").value.trim();
           if (!contact) { st.className = "form-status is-error"; st.textContent = "Add an email or phone so we can reach you."; return; }
-          var body = "Tracercoin done-for-you setup request\n\n"
-            + "Name: " + (name || "-") + "\n"
-            + "Contact: " + contact + "\n"
-            + "Hardware: " + (rig || "-") + "\n"
-            + "Notes: " + (msg || "-") + "\n";
-          var href = "mailto:media@tracercoin.org?subject=" + encodeURIComponent("TFX mining setup request")
-            + "&body=" + encodeURIComponent(body);
-          window.location.href = href;
-          st.className = "form-status is-success";
-          st.textContent = "Opening your email app with the request ready to send. If nothing opens, email media@tracercoin.org with your rig details.";
+          var btn = document.getElementById("s-submit"); btn.disabled = true;
+          st.className = "form-status"; st.textContent = "Sending your request…";
+          fetch("/api/support", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+              type: "service", name: name, contact: contact,
+              subject: "Done-for-you mining setup",
+              message: msg || "(no extra notes)",
+              meta: rig ? ("Hardware: " + rig) : null,
+              source: "quick-start", _gotcha: ""
+            })
+          })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) {
+            if (!r.ok) throw new Error(d.detail || ("Error " + r.status)); return d; }); })
+          .then(function () {
+            form.innerHTML = '<div class="callout" role="status"><strong>Request received.</strong> ' +
+              'Thanks — your setup request is in our queue and we\'ll be in touch shortly.</div>';
+          })
+          .catch(function (err) { btn.disabled = false; st.className = "form-status is-error"; st.textContent = err.message || "Something went wrong. Please try again."; });
         });
       }
 
