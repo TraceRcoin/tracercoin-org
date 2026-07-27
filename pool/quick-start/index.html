@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" data-tfx-auth="out" data-tfx-list="no" data-tfx-reg="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start — Mine Tracercoin (TFX)</title>
+  <meta name="description" content="Guided quick start for mining Tracercoin (TFX). New to mining or advanced? Get taught, request a done-for-you setup, grab copy-paste prompts and scripts, or jump straight to the technical instructions." />
+  <meta name="robots" content="noindex" />
+
+  <meta name="theme-color" content="#0a0e14" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- sets <html data-tfx-*> before paint (see /js/auth-state.js) -->
+  <script src="/js/auth-state.js"></script>
+
+  <style>
+    .wiz { max-width: 900px; margin: 0 auto; padding: 8px 22px 80px; }
+    .wiz-crumbs { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: .82rem; color: var(--text-dim); font-family: var(--mono);
+      text-transform: uppercase; letter-spacing: .04em; margin-bottom: 18px; min-height: 20px; }
+    .wiz-crumbs a { color: var(--accent-2); }
+    .wiz-crumbs span.sep { color: var(--border-2); }
+
+    .wiz-panel { display: none; }
+    .wiz-panel.is-active { display: block; animation: wizfade .25s ease; }
+    @keyframes wizfade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .wiz-lead { color: var(--text-soft); font-size: 1.05rem; margin: 0 0 26px; }
+
+    /* Option cards (big, clickable) */
+    .opt-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+    .opt {
+      display: flex; flex-direction: column; gap: 8px; text-align: left;
+      background: linear-gradient(180deg, var(--surface), var(--bg-alt));
+      border: 1px solid var(--border-2); border-radius: var(--radius);
+      padding: 24px 22px; color: var(--text); text-decoration: none;
+      transition: transform .15s, border-color .15s, box-shadow .15s;
+    }
+    .opt:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
+    .opt .opt-ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+      color: var(--accent-2); background: rgba(94,234,212,.10); border: 1px solid var(--border-2); margin-bottom: 6px; }
+    .opt h3 { margin: 0; font-size: 1.18rem; }
+    .opt p { margin: 0; color: var(--text-soft); font-size: .94rem; }
+    .opt .opt-go { margin-top: auto; padding-top: 12px; color: var(--accent-2); font-weight: 600; font-size: .9rem; }
+
+    .wiz-back { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0;
+      color: var(--text-soft); font: inherit; cursor: pointer; padding: 0; margin-bottom: 16px; }
+    .wiz-back:hover { color: var(--text); }
+
+    /* Code / prompt cards with copy */
+    .codeblock { position: relative; margin: 14px 0; background: #060a10; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden; }
+    .codeblock-head { display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 8px 12px 8px 14px; border-bottom: 1px solid var(--border);
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--text-dim); }
+    .codeblock pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--mono);
+      font-size: .86rem; line-height: 1.6; color: var(--text); tab-size: 2; white-space: pre-wrap; word-break: break-word; }
+    .copy-btn { flex: none; font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .05em;
+      cursor: pointer; color: var(--accent-2); background: rgba(94,234,212,.08);
+      border: 1px solid var(--border-2); border-radius: 999px; padding: 5px 12px; transition: .15s; }
+    .copy-btn:hover { color: #fff; border-color: var(--accent); }
+    .copy-btn.is-done { color: var(--success); border-color: rgba(74,222,128,.4); }
+
+    .prompt-card { margin-top: 22px; }
+    .prompt-card > h3 { margin: 0 0 2px; font-size: 1.05rem; }
+    .prompt-card > p.hint { margin: 0; color: var(--text-dim); font-size: .88rem; }
+    .inline-code { font-family: var(--mono); font-size: .9em; color: var(--accent-2); background: var(--surface); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+
+    .tech-params { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 18px 0; }
+    .tech-param { background: var(--surface); padding: 16px 18px; }
+    .tech-param dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); margin: 0 0 6px; }
+    .tech-param dd { margin: 0; font-family: var(--mono); font-size: 1rem; color: var(--accent-2); word-break: break-all; }
+
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: .92rem; margin-bottom: 6px; color: var(--text-soft); }
+    .field input, .field textarea { width: 100%; padding: 11px 13px; background: var(--bg); color: var(--text);
+      border: 1px solid var(--border-2); border-radius: var(--radius-sm); font: inherit; font-size: 1rem; }
+    .field textarea { min-height: 96px; resize: vertical; }
+    .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Tracercoin home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" role="img" aria-hidden="true">
+            <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5eead4" /><stop offset="1" stop-color="#38bdf8" />
+            </linearGradient></defs>
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#lg)" stroke-width="2" />
+            <path d="M16 6 v20 M8 11 h16 M8 21 h16" fill="none" stroke="url(#lg)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-name">Tracercoin <span class="ticker">TFX</span></span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li class="nav-has-dropdown">
+          <details class="nav-dropdown">
+            <summary>What is it
+              <svg class="caret" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <ul class="dropdown-menu">
+              <li><a href="/about/#what">What is Tracercoin?<small>The proof-of-work memory chain</small></a></li>
+              <li><a href="/about/#wallet">What is the Tracercoin wallet?<small>Hold, send &amp; receive TFX</small></a></li>
+              <li><a href="/about/#exchange">What is the Tracercoin exchange?<small>Trading TFX — what's planned</small></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/">Get started</a></li>
+        <li><a href="/pool/" aria-current="page">Mining</a></li>
+        <li data-tfx="auth-only"><a href="/status/">Status</a></li>
+        <li data-tfx="auth-only"><a href="/portal/">Miner portal</a></li>
+        <li data-tfx="auth-only"><button type="button" class="btn btn-ghost btn-sm" data-tfx-logout>Sign out</button></li>
+        <li data-tfx="noauth-only"><a href="/portal/">Sign in</a></li>
+        <li data-tfx="anon-only"><a class="btn btn-ghost btn-sm" href="/#waitlist">Join waitlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="wiz">
+        <p class="wiz-crumbs" id="crumbs" aria-live="polite"></p>
+
+        <!-- STEP: choose experience level -->
+        <div class="wiz-panel" id="choose">
+          <p class="section-eyebrow">Quick start</p>
+          <h1 class="section-title" style="margin-bottom:10px;">Let's get you mining</h1>
+          <p class="wiz-lead">Two ways in. Pick the one that fits — you can switch any time.</p>
+          <div class="opt-grid">
+            <a class="opt" href="#new">
+              <span class="opt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 14c3.3 0 6 1.3 6 3v2H6v-2c0-1.7 2.7-3 6-3Zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+              <h3>New to mining</h3>
+              <p>Walk me through it — teach me, do it for me, or hand me ready-to-use prompts and scripts.</p>
+              <span class="opt-go">Choose this →</span>
+            </a>
+            <a class="opt" href="#advanced">
+              <span class="opt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3>Advanced user</h3>
+              <p>Skip the fluff. Just the pool endpoint, worker format, and a config I can paste in.</p>
+              <span class="opt-go">Choose this →</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- STEP: advanced technical -->
+        <div class="wiz-panel" id="advanced">
+          <button class="wiz-back" type="button" data-goto="#choose">← Back</button>
+          <p class="section-eyebrow">Advanced</p>
+          <h2 class="section-title" style="margin-bottom:8px;">Technical setup — just the essentials</h2>
+          <p class="wiz-lead">Point any Scrypt miner at the community pool. Your username is your TFX payout address.</p>
+
+          <dl class="tech-params" aria-label="Pool connection parameters">
+            <div class="tech-param"><dt>Stratum URL</dt><dd>stratum+tcp://pool.tracercoin.org</dd></div>
+            <div class="tech-param"><dt>Port</dt><dd>3333</dd></div>
+            <div class="tech-param"><dt>Algorithm</dt><dd>Scrypt</dd></div>
+            <div class="tech-param"><dt>Username</dt><dd>your-tfx1-address.worker</dd></div>
+            <div class="tech-param"><dt>Password</dt><dd>x</dd></div>
+            <div class="tech-param"><dt>Pool fee</dt><dd>2%</dd></div>
+          </dl>
+
+          <div class="codeblock">
+            <div class="codeblock-head"><span>cgminer · command line</span><button class="copy-btn" type="button" data-copy="#c-cg">Copy</button></div>
+            <pre id="c-cg">cgminer --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u tfx1youraddresshere.rig1 \
+  -p x</pre>
+          </div>
+
+          <div class="codeblock">
+            <div class="codeblock-head"><span>generic stratum config</span><button class="copy-btn" type="button" data-copy="#c-json">Copy</button></div>
+            <pre id="c-json">{
+  "algo": "scrypt",
+  "url":  "stratum+tcp://pool.tracercoin.org:3333",
+  "user": "tfx1youraddresshere.rig1",
+  "pass": "x"
+}</pre>
+          </div>
+
+          <div class="path-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+            <a class="btn btn-primary btn-sm" href="/portal/">Open the miner portal</a>
+            <a class="btn btn-ghost btn-sm" href="/pool/">Full mining guide</a>
+          </div>
+        </div>
+
+        <!-- STEP: new-to-mining paths -->
+        <div class="wiz-panel" id="new">
+          <button class="wiz-back" type="button" data-goto="#choose">← Back</button>
+          <p class="section-eyebrow">New to mining</p>
+          <h2 class="section-title" style="margin-bottom:8px;">How do you want to learn it?</h2>
+          <p class="wiz-lead">Three ways to get from zero to your first shares.</p>
+          <div class="opt-grid">
+            <a class="opt" href="#teach">
+              <span class="opt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 6h16v11H4zM2 20h20M10 10l4 2.5L10 15z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+              <h3>Teach me how</h3>
+              <p>Watch the walkthroughs and subscribe for step-by-step video guides.</p>
+              <span class="opt-go">Learn by watching →</span>
+            </a>
+            <a class="opt" href="#service">
+              <span class="opt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M19 12a7 7 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1L16.4 3h-4l-.4 2.6a7 7 0 0 0-1.7 1l-2.4-1-2 3.4L7.6 11a7 7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6a7 7 0 0 0 .1-1Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></span>
+              <h3>Do it for me</h3>
+              <p>A paid, done-for-you setup service. Tell us about your rig; we'll configure it.</p>
+              <span class="opt-go">Request setup →</span>
+            </a>
+            <a class="opt" href="#prompts">
+              <span class="opt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4M13 4l-2 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3>Prompt agents</h3>
+              <p>Copy-paste prompts and scripts — drop them into your AI assistant or miner config.</p>
+              <span class="opt-go">Grab the prompts →</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- STEP: teach me how -->
+        <div class="wiz-panel" id="teach">
+          <button class="wiz-back" type="button" data-goto="#new">← Back</button>
+          <p class="section-eyebrow">Teach me how</p>
+          <h2 class="section-title" style="margin-bottom:8px;">Learn it by watching</h2>
+          <p class="wiz-lead">Original Winslow walkthroughs cover the wallet, mining, and node setup — and subscribe on YouTube to catch every new guide as it ships.</p>
+          <div class="callout" role="note" style="margin-bottom:20px;">
+            <strong>Subscribe on YouTube.</strong> New step-by-step guides are posted to the official
+            <strong>@Tracercoin</strong> channel as each feature ships — subscribe so you never miss one.
+          </div>
+          <div class="path-actions" style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-primary btn-sm" href="https://www.youtube.com/@Tracercoin" target="_blank" rel="noopener">Subscribe on YouTube</a>
+            <a class="btn btn-ghost btn-sm" href="/#video-title">Watch the walkthroughs now</a>
+            <a class="btn btn-ghost btn-sm" href="/pool/">Read the mining guide</a>
+          </div>
+        </div>
+
+        <!-- STEP: do it for me -->
+        <div class="wiz-panel" id="service">
+          <button class="wiz-back" type="button" data-goto="#new">← Back</button>
+          <p class="section-eyebrow">Do it for me</p>
+          <h2 class="section-title" style="margin-bottom:8px;">Done-for-you mining setup</h2>
+          <p class="wiz-lead">Don't want to touch a config file? Tell us about your hardware and we'll set your miner up on the pool for you. This is a paid service — send the details and we'll reply with what's involved.</p>
+
+          <form id="service-form" novalidate>
+            <div class="field">
+              <label for="s-name">Your name</label>
+              <input type="text" id="s-name" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="s-contact">Email or phone (so we can reach you)</label>
+              <input type="text" id="s-contact" autocomplete="email" placeholder="you@example.com" />
+            </div>
+            <div class="field">
+              <label for="s-rig">What hardware do you have?</label>
+              <input type="text" id="s-rig" placeholder="e.g. Antminer L7, or a GPU rig" />
+            </div>
+            <div class="field">
+              <label for="s-msg">Anything else we should know? <span class="muted">(optional)</span></label>
+              <textarea id="s-msg" placeholder="Operating system, how many rigs, timezone…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="s-submit">Send my setup request</button>
+            <p class="form-status" id="s-status" role="status" aria-live="polite" style="margin-top:12px;"></p>
+          </form>
+
+          <div class="callout" role="note" style="margin-top:22px;">
+            This is a service fee for setup help — configuring your own hardware. It is not an investment,
+            and there is no token sale. TFX is earned by mining. Nothing here is financial advice.
+          </div>
+        </div>
+
+        <!-- STEP: prompt agents -->
+        <div class="wiz-panel" id="prompts">
+          <button class="wiz-back" type="button" data-goto="#new">← Back</button>
+          <p class="section-eyebrow">Prompt agents</p>
+          <h2 class="section-title" style="margin-bottom:8px;">Prompts &amp; scripts — copy, paste, go</h2>
+          <p class="wiz-lead">Click <strong>Copy</strong>, then paste into your AI assistant or your miner's config. Swap in your own <span class="inline-code">tfx1…</span> address.</p>
+
+          <div class="prompt-card">
+            <h3>Ask an AI assistant to set up your miner</h3>
+            <p class="hint">Paste into Claude, ChatGPT, or any assistant — fill in the brackets.</p>
+            <div class="codeblock">
+              <div class="codeblock-head"><span>prompt</span><button class="copy-btn" type="button" data-copy="#p-ai">Copy</button></div>
+              <pre id="p-ai">I want to mine Tracercoin (TFX) on the community pool. It is a Scrypt
+proof-of-work coin (Litecoin fork model). Help me configure my miner
+step by step for these settings:
+
+- Pool: stratum+tcp://pool.tracercoin.org:3333
+- Algorithm: scrypt
+- Username: [MY_TFX1_ADDRESS].[WORKER_NAME]   (password can be: x)
+
+My hardware is: [DESCRIBE YOUR ASIC OR GPU RIG].
+My operating system is: [WINDOWS / LINUX / etc.].
+
+Give me the exact commands or config file for my setup, explain how to
+confirm it is submitting accepted shares, and tell me how to check my
+hashrate and payouts in the Tracercoin miner portal. Do not give any
+financial or price advice — just the technical setup.</pre>
+            </div>
+          </div>
+
+          <div class="prompt-card">
+            <h3>cgminer / bfgminer command</h3>
+            <p class="hint">Scrypt command line — replace the address.</p>
+            <div class="codeblock">
+              <div class="codeblock-head"><span>bash</span><button class="copy-btn" type="button" data-copy="#p-cg">Copy</button></div>
+              <pre id="p-cg">cgminer --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u tfx1youraddresshere.rig1 \
+  -p x</pre>
+            </div>
+          </div>
+
+          <div class="prompt-card">
+            <h3>Generic stratum config (JSON)</h3>
+            <p class="hint">For miners that take a JSON config block.</p>
+            <div class="codeblock">
+              <div class="codeblock-head"><span>json</span><button class="copy-btn" type="button" data-copy="#p-json">Copy</button></div>
+              <pre id="p-json">{
+  "algo": "scrypt",
+  "url":  "stratum+tcp://pool.tracercoin.org:3333",
+  "user": "tfx1youraddresshere.rig1",
+  "pass": "x"
+}</pre>
+            </div>
+          </div>
+
+          <div class="prompt-card">
+            <h3>Full node config — tracercoin.conf</h3>
+            <p class="hint">If you're also running <span class="inline-code">tracercoind</span>.</p>
+            <div class="codeblock">
+              <div class="codeblock-head"><span>tracercoin.conf</span><button class="copy-btn" type="button" data-copy="#p-conf">Copy</button></div>
+              <pre id="p-conf">rpcuser=changeme
+rpcpassword=change-this-to-a-long-random-string
+server=1
+listen=1
+# daemon=1   # uncomment on Linux to run in the background</pre>
+            </div>
+          </div>
+
+          <div class="path-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;">
+            <a class="btn btn-primary btn-sm" href="/portal/">Open the miner portal</a>
+            <a class="btn btn-ghost btn-sm" href="/pool/">Full mining guide</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="disclaimer" role="contentinfo">
+        <p>
+          <strong>Disclaimer.</strong> TFX is a utility cryptocurrency and an experimental technology —
+          not an investment or financial product. Mining rewards are not fixed or guaranteed and depend
+          on hardware, network difficulty, and energy costs. Nothing here is financial, legal, or tax advice.
+          No tokens are for sale, and this site does not solicit money.
+        </p>
+      </div>
+      <p class="copyright">&copy; <span id="year">2026</span> Tracercoin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+  <script>
+    (function () {
+      "use strict";
+      var y = document.getElementById("year"); if (y) y.textContent = String(new Date().getFullYear());
+
+      var panels = Array.prototype.slice.call(document.querySelectorAll(".wiz-panel"));
+      var ids = panels.map(function (p) { return p.id; });
+      var crumbs = document.getElementById("crumbs");
+
+      // Breadcrumb trail per step so users always know where they are.
+      var TRAIL = {
+        choose:   [["Quick start", null]],
+        advanced: [["Quick start", "#choose"], ["Advanced", null]],
+        "new":    [["Quick start", "#choose"], ["New to mining", null]],
+        teach:    [["Quick start", "#choose"], ["New to mining", "#new"], ["Teach me how", null]],
+        service:  [["Quick start", "#choose"], ["New to mining", "#new"], ["Do it for me", null]],
+        prompts:  [["Quick start", "#choose"], ["New to mining", "#new"], ["Prompt agents", null]]
+      };
+
+      function render(id) {
+        if (ids.indexOf(id) === -1) id = "choose";
+        panels.forEach(function (p) { p.classList.toggle("is-active", p.id === id); });
+        var trail = TRAIL[id] || TRAIL.choose;
+        crumbs.innerHTML = "";
+        trail.forEach(function (step, i) {
+          if (i) { var s = document.createElement("span"); s.className = "sep"; s.textContent = "›"; crumbs.appendChild(s); }
+          var label = step[0], href = step[1];
+          if (href) { var a = document.createElement("a"); a.href = href; a.textContent = label; crumbs.appendChild(a); }
+          else { var t = document.createElement("strong"); t.textContent = label; crumbs.appendChild(t); }
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function current() { return (location.hash || "#choose").replace(/^#/, ""); }
+      window.addEventListener("hashchange", function () { render(current()); });
+
+      // Back buttons that don't rely on browser history.
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-goto]");
+        if (b) { e.preventDefault(); location.hash = b.getAttribute("data-goto"); }
+      });
+
+      // Copy-to-clipboard for prompts/scripts.
+      document.addEventListener("click", function (e) {
+        var btn = e.target.closest(".copy-btn"); if (!btn) return;
+        var el = document.querySelector(btn.getAttribute("data-copy")); if (!el) return;
+        var text = el.textContent;
+        var done = function () { var o = btn.textContent; btn.textContent = "Copied!"; btn.classList.add("is-done");
+          setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("is-done"); }, 1600); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+        } else { fallback(text, done); }
+      });
+      function fallback(text, done) {
+        var ta = document.createElement("textarea"); ta.value = text;
+        ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(ta);
+      }
+
+      // "Do it for me" — compose a setup request to the media inbox.
+      var form = document.getElementById("service-form");
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var st = document.getElementById("s-status");
+          var name = document.getElementById("s-name").value.trim();
+          var contact = document.getElementById("s-contact").value.trim();
+          var rig = document.getElementById("s-rig").value.trim();
+          var msg = document.getElementById("s-msg").value.trim();
+          if (!contact) { st.className = "form-status is-error"; st.textContent = "Add an email or phone so we can reach you."; return; }
+          var body = "Tracercoin done-for-you setup request\n\n"
+            + "Name: " + (name || "-") + "\n"
+            + "Contact: " + contact + "\n"
+            + "Hardware: " + (rig || "-") + "\n"
+            + "Notes: " + (msg || "-") + "\n";
+          var href = "mailto:media@tracercoin.org?subject=" + encodeURIComponent("TFX mining setup request")
+            + "&body=" + encodeURIComponent(body);
+          window.location.href = href;
+          st.className = "form-status is-success";
+          st.textContent = "Opening your email app with the request ready to send. If nothing opens, email media@tracercoin.org with your rig details.";
+        });
+      }
+
+      render(current());
+    })();
+  </script>
+</body>
+</html>
