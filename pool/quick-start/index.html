@@ -158,7 +158,7 @@
           <button class="wiz-back" type="button" data-goto="#choose">← Back</button>
           <p class="section-eyebrow">Advanced</p>
           <h2 class="section-title" style="margin-bottom:8px;">Technical setup — just the essentials</h2>
-          <p class="wiz-lead">Point any Scrypt miner at the community pool. Your username is your TFX payout address.</p>
+          <p class="wiz-lead">Sign in to the miner portal and add a worker, then point any Scrypt miner at the community pool using that worker login — your <span class="inline-code">account.worker</span> and its password. Payouts go to the payout address on your portal account.</p>
 
           <div class="path-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px;">
             <a class="btn btn-ghost btn-sm" href="/pool/#benchmark">Benchmark tools</a>
@@ -171,25 +171,44 @@
             <div class="tech-param"><dt>Stratum URL</dt><dd>stratum+tcp://pool.tracercoin.org</dd></div>
             <div class="tech-param"><dt>Port</dt><dd>3333</dd></div>
             <div class="tech-param"><dt>Algorithm</dt><dd>Scrypt</dd></div>
-            <div class="tech-param"><dt>Username</dt><dd>your-tfx1-address.worker</dd></div>
-            <div class="tech-param"><dt>Password</dt><dd>x</dd></div>
+            <div class="tech-param"><dt>Username</dt><dd>account.worker</dd></div>
+            <div class="tech-param"><dt>Password</dt><dd>your worker password</dd></div>
             <div class="tech-param"><dt>Pool fee</dt><dd>2%</dd></div>
           </dl>
 
+          <div class="callout" role="note" style="margin:0 0 20px;">
+            <strong>Before you connect.</strong> You need a <a href="/portal/">miner portal</a> account with a
+            worker added (your login is <span class="inline-code">account.worker</span> plus the worker password)
+            and a payout address set on the account — that is where rewards are sent. Then pick the miner for your
+            hardware below. Full requirements are on the <a href="/pool/#prerequisites">mining guide</a>.
+          </div>
+
+          <p class="wiz-lead" style="margin:22px 0 6px;"><strong>Easiest path — CPU with cpuminer.</strong> <span class="inline-code">cpuminer</span> / <span class="inline-code">cpuminer-opt</span> (the <span class="inline-code">minerd</span> binary) mines Scrypt on any 64-bit CPU — the simplest way to get your first accepted shares. Swap in your own <span class="inline-code">account.worker</span> login and its password.</p>
+
           <div class="codeblock">
-            <div class="codeblock-head"><span>cgminer · command line</span><button class="copy-btn" type="button" data-copy="#c-cg">Copy</button></div>
+            <div class="codeblock-head"><span>cpuminer (minerd) · command line</span><button class="copy-btn" type="button" data-copy="#c-cpu">Copy</button></div>
+            <pre id="c-cpu">minerd --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u youraccount.rig1 \
+  -p yourworkerpassword</pre>
+          </div>
+
+          <p class="wiz-lead" style="margin:22px 0 6px;"><strong>GPU / ASIC path — ccminer, sgminer, cgminer.</strong> These do <em>not</em> CPU-mine. Most DIY GPU rigs are NVIDIA, so <span class="inline-code">ccminer</span> is the recommended pick (highest Scrypt hashrate; needs CUDA + a recent NVIDIA driver). On AMD use <span class="inline-code">sgminer</span> (needs OpenCL). <span class="inline-code">CGMiner 3.7.2</span> is only a legacy fallback — 4.x removed Scrypt GPU support. ASICs use their own built-in dashboard with the same worker login. The command below takes the same worker login for any of these miners.</p>
+
+          <div class="codeblock">
+            <div class="codeblock-head"><span>GPU · ccminer / sgminer / cgminer 3.7.2</span><button class="copy-btn" type="button" data-copy="#c-cg">Copy</button></div>
             <pre id="c-cg">cgminer --scrypt \
   -o stratum+tcp://pool.tracercoin.org:3333 \
-  -u tfx1youraddresshere.rig1 \
-  -p x</pre>
+  -u youraccount.rig1 \
+  -p yourworkerpassword</pre>
           </div>
 
           <div class="codeblock">
-            <div class="codeblock-head"><span>bfgminer · command line</span><button class="copy-btn" type="button" data-copy="#c-bfg">Copy</button></div>
+            <div class="codeblock-head"><span>bfgminer · GPU/ASIC command line</span><button class="copy-btn" type="button" data-copy="#c-bfg">Copy</button></div>
             <pre id="c-bfg">bfgminer --scrypt \
   -o stratum+tcp://pool.tracercoin.org:3333 \
-  -u tfx1youraddresshere.rig1 \
-  -p x</pre>
+  -u youraccount.rig1 \
+  -p yourworkerpassword</pre>
           </div>
 
           <div class="codeblock">
@@ -197,8 +216,8 @@
             <pre id="c-json">{
   "algo": "scrypt",
   "url":  "stratum+tcp://pool.tracercoin.org:3333",
-  "user": "tfx1youraddresshere.rig1",
-  "pass": "x"
+  "user": "youraccount.rig1",
+  "pass": "yourworkerpassword"
 }</pre>
           </div>
 
@@ -292,7 +311,7 @@
           <button class="wiz-back" type="button" data-goto="#new">← Back</button>
           <p class="section-eyebrow">Prompt agents</p>
           <h2 class="section-title" style="margin-bottom:8px;">Prompts &amp; scripts — copy, paste, go</h2>
-          <p class="wiz-lead">This is how <strong>Winslow</strong> teaches the AI on your own machine to set you up. Click <strong>Copy</strong>, then paste into your AI assistant — Claude, ChatGPT, or any — or straight into your miner's config. Swap in your own <span class="inline-code">tfx1…</span> address.</p>
+          <p class="wiz-lead">This is how <strong>Winslow</strong> teaches the AI on your own machine to set you up. Click <strong>Copy</strong>, then paste into your AI assistant — Claude, ChatGPT, or any — or straight into your miner's config. Swap in your own portal worker login — <span class="inline-code">account.worker</span> and its password.</p>
 
           <div class="prompt-card">
             <h3>Ask an AI assistant to set up your miner</h3>
@@ -305,10 +324,16 @@ step by step for these settings:
 
 - Pool: stratum+tcp://pool.tracercoin.org:3333
 - Algorithm: scrypt
-- Username: [MY_TFX1_ADDRESS].[WORKER_NAME]   (password can be: x)
+- Username: [MY_PORTAL_ACCOUNT].[WORKER_NAME]   (e.g. youraccount.rig1)
+- Password: [MY_WORKER_PASSWORD]   (the worker password I set in the portal)
 
-My hardware is: [DESCRIBE YOUR ASIC OR GPU RIG].
+My hardware is: [DESCRIBE YOUR CPU, GPU, OR ASIC].
 My operating system is: [WINDOWS / LINUX / etc.].
+
+If I am mining on a CPU, use cpuminer / cpuminer-opt (the minerd binary) —
+not cgminer, which cannot CPU-mine. For a GPU, use ccminer on NVIDIA
+(recommended, highest Scrypt hashrate) or sgminer on AMD; CGMiner 3.7.2 is
+only a legacy fallback since current CGMiner removed Scrypt GPU support.
 
 Give me the exact commands or config file for my setup, explain how to
 confirm it is submitting accepted shares, and tell me how to check my
@@ -318,20 +343,32 @@ financial or price advice — just the technical setup.</pre>
           </div>
 
           <div class="prompt-card">
-            <h3>cgminer / bfgminer command</h3>
-            <p class="hint">Scrypt command line — replace the address.</p>
+            <h3>cpuminer (minerd) command — easiest, any CPU</h3>
+            <p class="hint">CPU mining with cpuminer / cpuminer-opt — replace with your worker login. (cgminer can't CPU-mine.)</p>
+            <div class="codeblock">
+              <div class="codeblock-head"><span>bash</span><button class="copy-btn" type="button" data-copy="#p-cpu">Copy</button></div>
+              <pre id="p-cpu">minerd --scrypt \
+  -o stratum+tcp://pool.tracercoin.org:3333 \
+  -u youraccount.rig1 \
+  -p yourworkerpassword</pre>
+            </div>
+          </div>
+
+          <div class="prompt-card">
+            <h3>GPU / ASIC command — ccminer / sgminer / cgminer</h3>
+            <p class="hint">NVIDIA: ccminer (recommended, highest Scrypt hashrate; needs CUDA). AMD: sgminer (needs OpenCL). CGMiner 3.7.2 only as a legacy fallback — current cgminer dropped Scrypt GPU support. Same worker login for any binary.</p>
             <div class="codeblock">
               <div class="codeblock-head"><span>bash</span><button class="copy-btn" type="button" data-copy="#p-cg">Copy</button></div>
               <pre id="p-cg">cgminer --scrypt \
   -o stratum+tcp://pool.tracercoin.org:3333 \
-  -u tfx1youraddresshere.rig1 \
-  -p x
+  -u youraccount.rig1 \
+  -p yourworkerpassword
 
 # bfgminer — same Scrypt stratum settings:
 bfgminer --scrypt \
   -o stratum+tcp://pool.tracercoin.org:3333 \
-  -u tfx1youraddresshere.rig1 \
-  -p x</pre>
+  -u youraccount.rig1 \
+  -p yourworkerpassword</pre>
             </div>
           </div>
 
@@ -343,8 +380,8 @@ bfgminer --scrypt \
               <pre id="p-json">{
   "algo": "scrypt",
   "url":  "stratum+tcp://pool.tracercoin.org:3333",
-  "user": "tfx1youraddresshere.rig1",
-  "pass": "x"
+  "user": "youraccount.rig1",
+  "pass": "yourworkerpassword"
 }</pre>
             </div>
           </div>
