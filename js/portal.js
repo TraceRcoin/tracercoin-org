@@ -176,7 +176,51 @@ var TOKEN_KEY = "tfx_portal_token";
         ? "Currently on." + (me.phone_masked ? " Codes go to " + me.phone_masked + "." : "")
         : "Currently off.";
       window.__me = me;
+      renderPayout(me);
       return me;
+    });
+  }
+
+  /* ---------- Payout address ---------- */
+  // A mainnet TFX address is bech32 with the `tfx` prefix. The server does the
+  // authoritative checksum check; this is just a friendly client-side format hint.
+  var PAYOUT_RE = /^tfx1[02-9ac-hj-np-z]{6,87}$/i;
+
+  function renderPayout(me) {
+    var cur = $("payout-current"), input = $("payout-address");
+    if (!cur || !input) return;
+    var addr = me && me.payout_address;
+    if (addr) {
+      cur.className = "muted";
+      cur.innerHTML = "Current: <span class='inline-code'>" + esc(addr) + "</span>";
+      if (document.activeElement !== input) input.value = addr;
+    } else {
+      cur.className = "form-status is-error";
+      cur.textContent = "Not set — add an address below so the pool can pay you.";
+      if (document.activeElement !== input) input.value = "";
+    }
+  }
+
+  var payoutForm = $("payout-form");
+  if (payoutForm) {
+    payoutForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var st = $("payout-status");
+      var addr = ($("payout-address").value || "").trim();
+      if (!addr) { status(st, "Enter your tfx1… payout address.", "error"); return; }
+      if (!PAYOUT_RE.test(addr)) {
+        status(st, "That doesn't look like a tfx1… address — double-check and try again.", "error");
+        return;
+      }
+      var btn = $("payout-save"); btn.disabled = true; status(st, "Saving…");
+      api("/account", { method: "PATCH", body: { payout_address: addr } })
+        .then(function (me) {
+          window.__me = me;
+          renderPayout(me);
+          status(st, "Payout address saved.", "success");
+        })
+        .catch(function (err) { status(st, err.message, "error"); })
+        .finally(function () { btn.disabled = false; });
     });
   }
 

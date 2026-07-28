@@ -255,6 +255,24 @@
           <p class="muted" id="round-text" style="margin-top:8px;">Waiting for the pool to come online.</p>
         </div>
 
+        <!-- Payout address -->
+        <div class="panel">
+          <h2>Payout address</h2>
+          <p class="panel-lead">Where the pool sends the TFX you mine. Set it or switch to a new wallet any time.</p>
+          <p id="payout-current" class="muted" style="margin:0 0 14px;">—</p>
+          <form id="payout-form" novalidate>
+            <div class="field">
+              <label for="payout-address">Your TFX address</label>
+              <input type="text" id="payout-address" placeholder="tfx1…" autocapitalize="none" spellcheck="false" autocomplete="off" />
+              <p class="field-hint">A mainnet Tracercoin address — it starts with <span class="inline-code">tfx1</span>.</p>
+            </div>
+            <div class="row-actions">
+              <button type="submit" class="btn btn-primary btn-sm" id="payout-save">Save address</button>
+            </div>
+            <p class="form-status" id="payout-status" role="status" aria-live="polite" style="text-align:left;"></p>
+          </form>
+        </div>
+
         <!-- Workers -->
         <div class="panel">
           <div class="panel-head">
