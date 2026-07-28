@@ -197,11 +197,12 @@
               <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>
             </div>
             <h3>Mining software</h3>
-            <p>A Scrypt miner such as
-              <a class="inline-code" href="https://github.com/ckolivas/cgminer" target="_blank" rel="noopener">cgminer</a>,
-              <a class="inline-code" href="https://github.com/luke-jr/bfgminer" target="_blank" rel="noopener">bfgminer</a>,
-              or your ASIC's built-in dashboard — anything that connects to a Stratum pool.</p>
-            <span class="card-go">cgminer &amp; bfgminer on GitHub &rarr;</span>
+            <p>For CPU, the easiest is
+              <a class="inline-code" href="https://github.com/pooler/cpuminer" target="_blank" rel="noopener">cpuminer</a>
+              (the <span class="inline-code">minerd</span> binary) — it works on any CPU where cgminer can't.
+              For GPU, ccminer is the pick on NVIDIA and sgminer on AMD (CGMiner 3.7.2 is a legacy fallback);
+              ASICs use their built-in dashboard — anything that speaks Scrypt Stratum.</p>
+            <span class="card-go">See the prerequisites below &rarr;</span>
           </article>
         </div>
 
@@ -212,6 +213,79 @@
           node, step by step. Copy the ready-made setup prompt and paste it into your assistant.
           <a href="/pool/quick-start/#prompts">Set it up with Winslow &amp; AI &rarr;</a>
           <br /><span class="muted" style="font-size:.9em;">Downloads &amp; source — the Tracercoin Core wallet (your <span class="inline-code">tfx1…</span> address), node source, and releases with checksums — live on <a href="https://github.com/TraceRcoin" target="_blank" rel="noopener">our GitHub</a>.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PREREQUISITES & ENVIRONMENT ============ -->
+    <section id="prerequisites" class="section section-alt" aria-labelledby="prereq-title">
+      <div class="container">
+        <p class="section-eyebrow">Prerequisites</p>
+        <h2 id="prereq-title" class="section-title">Prerequisites &amp; environment requirements</h2>
+        <p class="section-lead">
+          What every miner needs, then the extras for each kind of hardware. Pick the path that matches your
+          rig — CPU is the easiest way to test, ASIC is the competitive path.
+        </p>
+
+        <div class="callout" role="note" style="margin-bottom:26px;">
+          <strong>Every miner needs:</strong> a <a href="/portal/">miner portal</a> account with a worker added
+          (your login is <span class="inline-code">account.worker</span> — the account name, a dot, then the
+          worker name — plus the worker's password); a payout address set on the account (a
+          <span class="inline-code">tfx1&hellip;</span> wallet address, where rewards are sent); the pool endpoint
+          <span class="inline-code">stratum+tcp://pool.tracercoin.org:3333</span> with algorithm
+          <strong>Scrypt</strong>; and network access to reach the pool.
+        </div>
+
+        <div class="req-grid">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <h3>CPU mining — easiest / testing</h3>
+            <p>Use <span class="inline-code">cpuminer</span> / <span class="inline-code">cpuminer-opt</span>
+              (the <span class="inline-code">minerd</span> binary) — <strong>not cgminer</strong>. Any 64-bit CPU;
+              Windows, Linux, or macOS. On Windows add an antivirus exclusion (CPU miners are commonly flagged
+              as riskware). No GPU or drivers needed.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="6" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 16v3M17 16v3M8 10h4M8 12h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <h3>GPU mining (Scrypt)</h3>
+            <p>Most DIY GPU rigs are NVIDIA, so <strong><span class="inline-code">ccminer</span> is the
+              recommended pick</strong> — it delivers the highest Scrypt hashrate on NVIDIA cards and needs
+              CUDA plus a recent NVIDIA driver. On <strong>AMD</strong>, use <span class="inline-code">sgminer</span>
+              (needs the OpenCL runtime from the AMD driver). <span class="inline-code">CGMiner 3.7.2</span> is only
+              a legacy fallback — current cgminer 4.x removed Scrypt GPU support entirely. Scrypt is memory-hard,
+              so you need enough VRAM plus tuning (intensity, thread-concurrency, worksize) and an adequate PSU
+              and cooling.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="4" y="8" width="16" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 8V5M12 8V5M16 8V5M8 16v3M12 16v3M16 16v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <h3>ASIC — competitive</h3>
+            <p>A Scrypt ASIC such as the Antminer L3+ or L7. Point its built-in web interface at the pool with
+              your worker login — no PC or drivers required. This is the class to run for serious output.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 7h7v10H4zM13 7h7v10h-7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Both CPU + GPU on one rig</h3>
+            <p>Run two miners at once — <span class="inline-code">cpuminer</span> for the CPU and a GPU miner for
+              the card. Give each its own worker (for example <span class="inline-code">rig1cpu</span> and
+              <span class="inline-code">rig1gpu</span>) so the portal tracks them separately.</p>
+          </article>
+        </div>
+
+        <div class="callout" role="note" style="margin-top:26px;">
+          <strong>Informational only.</strong> These requirements describe how to participate in mining and are
+          not a promise of rewards or profit, and nothing here is financial, legal, or tax advice. Actual output
+          depends on your hardware, network difficulty, and energy cost.
         </div>
       </div>
     </section>
@@ -337,11 +411,11 @@
           </div>
           <div class="pool-param">
             <dt>Username</dt>
-            <dd>your-tfx1-address.worker</dd>
+            <dd>account.worker</dd>
           </div>
           <div class="pool-param">
             <dt>Password</dt>
-            <dd>x</dd>
+            <dd>your worker password</dd>
           </div>
           <div class="pool-param">
             <dt>Pool fee</dt>
@@ -371,33 +445,48 @@
           <li class="step">
             <div class="step-num" aria-hidden="true">2</div>
             <h3>Install your mining software</h3>
-            <p>Set up a Scrypt miner such as <span class="inline-code">cgminer</span> or
-              <span class="inline-code">bfgminer</span>, or open your ASIC's built-in miner
-              configuration page. You'll enter the pool details from above.</p>
+            <p>Pick the miner for your hardware. For a <strong>CPU</strong>, the easiest is
+              <span class="inline-code">cpuminer</span> / <span class="inline-code">cpuminer-opt</span>
+              (the <span class="inline-code">minerd</span> binary). For a <strong>GPU</strong>, use
+              <span class="inline-code">ccminer</span> (NVIDIA — recommended, highest Scrypt hashrate),
+              <span class="inline-code">sgminer</span> (AMD), or <span class="inline-code">CGMiner 3.7.2</span>
+              as a legacy fallback. For an <strong>ASIC</strong>, open its
+              built-in configuration page. You'll enter the pool details from above.</p>
           </li>
           <li class="step">
             <div class="step-num" aria-hidden="true">3</div>
             <h3>Point it at the pool</h3>
-            <p>Use your <span class="inline-code">tfx1&hellip;</span> address as the worker username
-              (optionally add a <span class="inline-code">.name</span> suffix per rig). The password
-              can be anything — <span class="inline-code">x</span> is fine.</p>
+            <p>Log in with your portal worker: the username is
+              <span class="inline-code">account.worker</span> (your portal account name, a dot, then the
+              worker name — add one per rig) and the password is the worker password you set in the portal.
+              Rewards are paid to the payout address on your account, not to the username.</p>
 
-            <div class="codeblock" role="group" aria-label="cgminer example command">
-              <div class="codeblock-head"><span>cgminer &middot; command line</span></div>
-              <pre><span class="cmt"># replace the address with your own tfx1 wallet address</span>
+            <div class="codeblock" role="group" aria-label="cpuminer example command">
+              <div class="codeblock-head"><span>cpuminer (minerd) &middot; easiest, any CPU</span></div>
+              <pre><span class="cmt"># cpuminer / cpuminer-opt mines Scrypt on any CPU — cgminer cannot CPU-mine</span>
+minerd <span class="tok">--scrypt</span> \
+  <span class="tok">-o</span> stratum+tcp://pool.tracercoin.org:3333 \
+  <span class="tok">-u</span> youraccount.rig1 \
+  <span class="tok">-p</span> yourworkerpassword</pre>
+            </div>
+
+            <div class="codeblock" role="group" aria-label="GPU miner example command">
+              <div class="codeblock-head"><span>GPU &middot; ccminer / sgminer / cgminer</span></div>
+              <pre><span class="cmt"># NVIDIA: ccminer (recommended). AMD: sgminer. cgminer only as 3.7.2 legacy.</span>
+<span class="cmt"># same -u/-p worker login for all — swap the binary name for your miner:</span>
 cgminer <span class="tok">--scrypt</span> \
   <span class="tok">-o</span> stratum+tcp://pool.tracercoin.org:3333 \
-  <span class="tok">-u</span> tfx1youraddresshere.rig1 \
-  <span class="tok">-p</span> x</pre>
+  <span class="tok">-u</span> youraccount.rig1 \
+  <span class="tok">-p</span> yourworkerpassword</pre>
             </div>
 
             <div class="codeblock" role="group" aria-label="bfgminer example command">
-              <div class="codeblock-head"><span>bfgminer &middot; command line</span></div>
+              <div class="codeblock-head"><span>bfgminer &middot; GPU/ASIC only</span></div>
               <pre><span class="cmt"># bfgminer takes the same Scrypt stratum settings</span>
 bfgminer <span class="tok">--scrypt</span> \
   <span class="tok">-o</span> stratum+tcp://pool.tracercoin.org:3333 \
-  <span class="tok">-u</span> tfx1youraddresshere.rig1 \
-  <span class="tok">-p</span> x</pre>
+  <span class="tok">-u</span> youraccount.rig1 \
+  <span class="tok">-p</span> yourworkerpassword</pre>
             </div>
           </li>
           <li class="step">
@@ -412,8 +501,8 @@ bfgminer <span class="tok">--scrypt</span> \
               <pre>{
   <span class="tok">"algo"</span>: <span class="tok">"scrypt"</span>,
   <span class="tok">"url"</span>:  <span class="tok">"stratum+tcp://pool.tracercoin.org:3333"</span>,
-  <span class="tok">"user"</span>: <span class="tok">"tfx1youraddresshere.rig1"</span>,
-  <span class="tok">"pass"</span>: <span class="tok">"x"</span>
+  <span class="tok">"user"</span>: <span class="tok">"youraccount.rig1"</span>,
+  <span class="tok">"pass"</span>: <span class="tok">"yourworkerpassword"</span>
 }</pre>
             </div>
           </li>
@@ -439,8 +528,9 @@ bfgminer <span class="tok">--scrypt</span> \
             <summary>What hardware can mine TFX?</summary>
             <div class="faq-body">
               <p>Any Scrypt-capable miner. Scrypt ASICs such as the Antminer L7 and L3+ are the most
-                efficient, but GPUs running a Scrypt miner work too. Because Tracercoin uses the same
-                algorithm as Litecoin, hardware built for Scrypt mining is directly compatible.</p>
+                efficient; a GPU works too (ccminer on NVIDIA, sgminer on AMD); and any CPU can mine with
+                cpuminer, which is the easiest way to test. Because Tracercoin uses the same algorithm as
+                Litecoin, hardware built for Scrypt mining is directly compatible.</p>
             </div>
           </details>
 
@@ -457,8 +547,10 @@ bfgminer <span class="tok">--scrypt</span> \
           <details class="faq-item">
             <summary>Where do my rewards go?</summary>
             <div class="faq-body">
-              <p>To the <span class="inline-code">tfx1&hellip;</span> wallet address you set as your
-                worker username. Keep that wallet backed up — whoever holds the keys holds the coins.</p>
+              <p>To the payout address set on your miner portal account — a
+                <span class="inline-code">tfx1&hellip;</span> wallet address. Your worker login
+                (<span class="inline-code">account.worker</span>) only identifies the rig; payouts follow the
+                account's payout address. Keep that wallet backed up — whoever holds the keys holds the coins.</p>
             </div>
           </details>
 
