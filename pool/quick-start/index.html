@@ -193,7 +193,7 @@
   -p yourworkerpassword</pre>
           </div>
 
-          <p class="wiz-lead" style="margin:22px 0 6px;"><strong>GPU / ASIC path — ccminer, sgminer, cgminer.</strong> These do <em>not</em> CPU-mine. Most DIY GPU rigs are NVIDIA, so <span class="inline-code">ccminer</span> is the recommended pick (highest Scrypt hashrate; needs CUDA + a recent NVIDIA driver). On AMD use <span class="inline-code">sgminer</span> (needs OpenCL). <span class="inline-code">CGMiner 3.7.2</span> is only a legacy fallback — 4.x removed Scrypt GPU support. ASICs use their own built-in dashboard with the same worker login. The command below takes the same worker login for any of these miners.</p>
+          <p class="wiz-lead" style="margin:22px 0 6px;"><strong>GPU / ASIC path — ccminer, sgminer, cgminer.</strong> These do <em>not</em> CPU-mine. Two GPU miners are recommended — pick the one for your card: <span class="inline-code">ccminer</span> on <strong>NVIDIA</strong> (needs CUDA + a recent NVIDIA driver) and <span class="inline-code">sgminer</span> on <strong>AMD</strong> (needs OpenCL). Both deliver the top Scrypt hashrate on their respective GPUs. <span class="inline-code">CGMiner 3.7.2</span> is only a legacy fallback — 4.x removed Scrypt GPU support. ASICs use their own built-in dashboard with the same worker login. The command below takes the same worker login for any of these miners.</p>
 
           <div class="codeblock">
             <div class="codeblock-head"><span>GPU · ccminer / sgminer / cgminer 3.7.2</span><button class="copy-btn" type="button" data-copy="#c-cg">Copy</button></div>
