@@ -266,8 +266,8 @@
               </li>
               <li class="step">
                 <div class="step-num" aria-hidden="true">2</div>
-                <h3>Install &amp; sync</h3>
-                <p>Open the app and let it connect to the network. The first launch downloads and verifies the blockchain — this can take a while. You'll see progress at the bottom of the window.</p>
+                <h3>Add a peer &amp; sync</h3>
+                <p>Because Tracercoin just launched, automatic peer discovery isn't populated yet — so add the launch node once: put the line <span class="inline-code">addnode=159.65.188.80</span> in your <span class="inline-code">tracercoin.conf</span> and restart, or open <strong>Window → Console</strong> and run <span class="inline-code">addnode 159.65.188.80 add</span>. The wallet then connects and verifies the blockchain — you'll see the peer count and sync progress at the bottom of the window.</p>
               </li>
               <li class="step">
                 <div class="step-num" aria-hidden="true">3</div>
@@ -280,6 +280,13 @@
                 <p>Use the <strong>Receive</strong> tab to generate a <span class="inline-code">tfx…</span> address, and the <strong>Send</strong> tab to pay one. That's it — you're on the network.</p>
               </li>
             </ol>
+            <div class="callout" role="note" style="margin-top:20px;">
+              <strong>New network — add the launch peer.</strong> Tracercoin just went live, so seed discovery
+              isn't populated yet. Point your wallet at the launch node once —
+              <span class="inline-code">addnode=159.65.188.80</span> in your <span class="inline-code">tracercoin.conf</span>
+              (then restart), or <span class="inline-code">addnode 159.65.188.80 add</span> in <strong>Window → Console</strong>.
+              Without a peer the wallet stays at 0 connections and can't sync.
+            </div>
             <div class="path-video">
               <div class="video-embed">
                 <video class="video-player" controls preload="none" playsinline poster="/videos/tfx-wallet.jpg">
@@ -360,7 +367,7 @@
               <li class="step">
                 <div class="step-num" aria-hidden="true">2</div>
                 <h3>Configure &amp; connect</h3>
-                <p>Create a <span class="inline-code">tracercoin.conf</span>, add the seed node, and open the P2P port so peers can reach you.</p>
+                <p>Create a <span class="inline-code">tracercoin.conf</span>, add the launch node — <span class="inline-code">addnode=159.65.188.80</span> — and open the P2P port (<span class="inline-code">9555</span>) so other peers can reach you too.</p>
               </li>
               <li class="step">
                 <div class="step-num" aria-hidden="true">3</div>
