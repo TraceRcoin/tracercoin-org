@@ -15,7 +15,10 @@
 
   <style>
     /* ---- Portal-local styles: built on the site's own design tokens ---- */
-    .portal-wrap { max-width: 960px; margin: 0 auto; padding: 40px 22px 80px; }
+    .portal-wrap { max-width: 960px; margin: 0 auto; padding: 40px 22px 28px; }
+    /* Portal-only: tighten auth screen → footer/disclaimer spacing */
+    .site-footer { padding-top: 24px; }
+    .disclaimer { margin-bottom: 12px; }
 
     /* Auth card */
     .auth-card {
@@ -182,8 +185,8 @@
               <input type="password" id="login-password" autocomplete="current-password" />
             </div>
             <button type="submit" class="btn btn-primary btn-block" id="login-submit">Sign in</button>
-            <p class="form-status" id="login-status" role="status" aria-live="polite"></p>
-            <p style="text-align:center;font-size:.9rem;margin-top:4px;color:var(--text-dim);">Are you having trouble logging in? <a class="linklike" href="/support/">Get account help</a></p>
+            <p class="form-status" id="login-status" role="status" aria-live="polite" style="margin-top:6px;min-height:0;"></p>
+            <p style="text-align:center;font-size:.9rem;margin-top:2px;color:var(--text-dim);">Are you having trouble logging in? <a class="linklike" href="/support/">Get account help</a></p>
           </form>
 
           <!-- Create account -->
@@ -225,7 +228,7 @@
           </form>
         </div>
 
-        <p class="muted" style="text-align:center;margin-top:20px;">
+        <p class="muted" style="text-align:center;margin-top:12px;margin-bottom:0;">
           New to mining? See the <a class="linklike" href="/pool/">get-started guide</a> first.
         </p>
       </section>
