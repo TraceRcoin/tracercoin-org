@@ -90,11 +90,13 @@ var TOKEN_KEY = "tfx_portal_token";
     var username = $("reg-username").value.trim().toLowerCase();
     var password = $("reg-password").value;
     var address = $("reg-address").value.trim();
+    var agreed = $("reg-terms").checked;
     if (username.length < 3) { status(st, "Choose a username of at least 3 characters.", "error"); return; }
     if (password.length < 8) { status(st, "Password must be at least 8 characters.", "error"); return; }
+    if (!agreed) { status(st, "Please accept the Terms of Service & Usage Agreement to continue.", "error"); return; }
 
     var btn = $("reg-submit"); btn.disabled = true; status(st, "Creating your account…");
-    api("/register", { method: "POST", body: { username: username, password: password, payout_address: address || null } })
+    api("/register", { method: "POST", body: { username: username, password: password, payout_address: address || null, accepted_terms: true } })
       .then(function (data) { setToken(data.token); enterDashboard(); })
       .catch(function (err) { status(st, err.message, "error"); })
       .finally(function () { btn.disabled = false; });

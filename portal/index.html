@@ -201,6 +201,11 @@
               <label for="reg-address">Payout TFX address <span class="muted">(optional — you can add it later)</span></label>
               <input type="text" id="reg-address" placeholder="tfx1…" autocapitalize="none" spellcheck="false" />
             </div>
+            <div class="field" style="display:flex;align-items:flex-start;gap:9px;">
+              <input type="checkbox" id="reg-terms" style="width:auto;margin-top:3px;flex:none;" />
+              <label for="reg-terms" style="margin:0;font-size:.92rem;">I have read and agree to the
+                <a href="/terms/" target="_blank" rel="noopener">Terms of Service &amp; Usage Agreement</a>.</label>
+            </div>
             <button type="submit" class="btn btn-primary btn-block" id="reg-submit">Create account</button>
             <p class="form-status" id="reg-status" role="status" aria-live="polite"></p>
           </form>
