@@ -303,9 +303,26 @@
               <label for="worker-label">Label <span class="muted">(optional)</span></label>
               <input type="text" id="worker-label" placeholder="Garage L7" />
             </div>
-            <div class="row-actions">
-              <button type="submit" class="btn btn-primary btn-sm" id="worker-create">Create worker</button>
-              <button type="button" class="btn btn-ghost btn-sm" id="worker-cancel">Cancel</button>
+            <div class="field">
+              <label for="worker-password">Worker password <span class="muted">(optional)</span></label>
+              <input type="text" id="worker-password" autocomplete="new-password" placeholder="Leave blank to auto-generate" autocapitalize="none" spellcheck="false" />
+              <p class="field-hint">Your rig uses this to connect to the pool. Or
+                <button type="button" class="linklike" id="worker-gen">generate a random one</button>.</p>
+            </div>
+            <div class="row-actions" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+              <div style="display:flex;gap:8px;">
+                <button type="submit" class="btn btn-primary btn-sm" id="worker-create">Create worker</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="worker-cancel">Cancel</button>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                <span class="muted" style="font-size:.8rem;">Copy config for your miner:</span>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+                  <button type="button" class="btn btn-ghost btn-sm" data-cfg="cgminer">cgminer</button>
+                  <button type="button" class="btn btn-ghost btn-sm" data-cfg="bfgminer">bfgminer</button>
+                  <button type="button" class="btn btn-ghost btn-sm" data-cfg="sgminer">sgminer</button>
+                  <button type="button" class="btn btn-ghost btn-sm" data-cfg="cpuminer">cpuminer</button>
+                </div>
+              </div>
             </div>
             <p class="form-status" id="worker-status" role="status" aria-live="polite" style="text-align:left;"></p>
             <div class="reveal hidden" id="worker-reveal">

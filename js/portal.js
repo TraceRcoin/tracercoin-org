@@ -416,24 +416,81 @@ var TOKEN_KEY = "tfx_portal_token";
     $("worker-login-preview").textContent = u + "." + (($("worker-name").value.trim().toLowerCase()) || "rig01");
   });
   function resetWorkerForm() {
-    $("worker-name").value = ""; $("worker-label").value = "";
+    $("worker-name").value = ""; $("worker-label").value = ""; $("worker-password").value = "";
     status($("worker-status"), ""); hide($("worker-reveal")); $("worker-pass").textContent = "";
   }
+
+  // Random pool-worker password (readable — no ambiguous 0/O/1/l/I).
+  function genWorkerPass() {
+    var cs = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    var out = "", n = 14;
+    var a = (window.crypto && window.crypto.getRandomValues) ? window.crypto.getRandomValues(new Uint32Array(n)) : null;
+    for (var i = 0; i < n; i++) { out += cs.charAt((a ? a[i] : Math.floor(Math.random() * 1e9)) % cs.length); }
+    return out;
+  }
+  $("worker-gen").addEventListener("click", function () {
+    $("worker-password").value = genWorkerPass();
+    status($("worker-status"), "Random worker password generated — save it into your rig.", "");
+  });
+
+  // Ready-to-run miner command for the worker being set up (Scrypt stratum).
+  var STRATUM_URL = "stratum+tcp://pool.tracercoin.org:3333";
+  function workerConfigCmd(miner, login, pass) {
+    var p = pass || "<your-worker-password>";
+    switch (miner) {
+      case "cgminer":  return "cgminer --scrypt -o " + STRATUM_URL + " -u " + login + " -p " + p;
+      case "bfgminer": return "bfgminer --scrypt -o " + STRATUM_URL + " -u " + login + " -p " + p;
+      case "sgminer":  return "sgminer -k scrypt -o " + STRATUM_URL + " -u " + login + " -p " + p;
+      case "cpuminer": return "minerd -a scrypt -o " + STRATUM_URL + " -u " + login + " -p " + p;
+      default: return "";
+    }
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      try {
+        var ta = document.createElement("textarea"); ta.value = text;
+        ta.style.position = "fixed"; ta.style.left = "-9999px";
+        document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+        document.body.removeChild(ta); resolve();
+      } catch (e) { reject(e); }
+    });
+  }
+  Array.prototype.forEach.call(addForm.querySelectorAll("[data-cfg]"), function (btn) {
+    btn.addEventListener("click", function () {
+      var miner = btn.getAttribute("data-cfg");
+      var login = ($("worker-login-preview").textContent || "").trim();
+      var pass = $("worker-password").value.trim();
+      var cmd = workerConfigCmd(miner, login, pass);
+      copyText(cmd).then(function () {
+        status($("worker-status"),
+          "Copied " + miner + " config" + (pass ? "" : " — set or generate a password to fill it in") + ".",
+          pass ? "success" : "");
+      }).catch(function () {
+        status($("worker-status"), "Couldn't copy automatically — config: " + cmd, "");
+      });
+    });
+  });
   addForm.addEventListener("submit", function (e) {
     e.preventDefault();
     var st = $("worker-status");
     var name = $("worker-name").value.trim().toLowerCase();
     var label = $("worker-label").value.trim();
+    var pass = $("worker-password").value.trim();
     if (!name) { status(st, "Give the worker a name.", "error"); return; }
+    if (pass && pass.length < 6) { status(st, "Worker password must be at least 6 characters.", "error"); return; }
     var btn = $("worker-create"); btn.disabled = true; status(st, "Creating worker…");
-    api("/workers", { method: "POST", body: { worker_name: name, label: label || null } })
+    var payload = { worker_name: name, label: label || null };
+    if (pass) payload.password = pass;
+    api("/workers", { method: "POST", body: payload })
       .then(function (data) {
         status(st, "Worker created.", "success");
         if (data.password) {
+          // Server generated one (no password was supplied) — reveal it once.
           $("worker-pass").textContent = data.password;
           show($("worker-reveal"));
         }
-        $("worker-name").value = ""; $("worker-label").value = "";
+        $("worker-name").value = ""; $("worker-label").value = ""; $("worker-password").value = "";
         return loadWorkers();
       })
       .catch(function (err) { status(st, err.message, "error"); })
